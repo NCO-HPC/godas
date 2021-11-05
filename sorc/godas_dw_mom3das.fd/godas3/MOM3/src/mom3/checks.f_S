@@ -1,0 +1,2217 @@
+      subroutine checks (errorc, vmixset, htr_mixset, hvel_mixset)
+      use mom3_mpp_mod
+      use arrays_2d
+      use memory_window
+      use sbc_info
+      use sbc_ocean
+      logical errorc, vmixset, htr_mixset, hvel_mixset
+!====================== include file "param.h" =========================
+!
+!====================== include file "size.h" ==========================
+!                                                                       
+!-----------------------------------------------------------------------
+!     USER INPUT: 
+!-----------------------------------------------------------------------
+!
+!     imt    = number of grid cells in the longitudinal direction
+!              (calculated cells are from 2 through imt-1. end cells
+!               are boundaries)          
+!
+!     jmt    = number of grid cells (latitude rows) in the latitudinal
+!              direction (calculated cells are from 2 through jmt-1.
+!              end cells are boundaries)   
+!                                
+!     km     = number of grid cells in the vertical direction          
+!              (calculated cells are from 1 through km. no boundary
+!               cells)
+!
+!     nt     = number of tracers (temperature, salinity, ...)
+!
+!     mnisle = maximum number of islands (unconnected land masses)
+!
+!     maxipp = maximum number of all island perimeter points
+!-----------------------------------------------------------------------
+!                                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+! window size must be appropriate for options with highest order numerics
+
+
+
+
+! specify lomem or himem on 3D diagnostics. default is himem
+
+!these are used to determine hardware/OS/compiler (V. Balaji vb@gfdl.gov)
+
+
+
+!compilers that support Cray pointers
+
+!values of kind: double and long are 8-byte, float and int are 4-byte
+!these might be different on non-SGICRAY, I believe
+
+
+!parallel machine types
+
+      parameter (imt= 362, jmt=  202, km= 40)
+      parameter (nt=2)
+      parameter (mnisle=50, maxipp=10000)
+      parameter (kbot = km)
+!
+!
+!-----------------------------------------------------------------------
+!     END USER INPUT
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!     "jmw"  = number of latitude rows within the MW (memory window).
+!     "jbuf" = number of northermost and southernmost buffer rows.
+!              The MW is symmetric because it has the same number of
+!              northermost and southernmost buffer rows "jbuf".
+!              total number of buffer rows = 2*jbuf
+!-----------------------------------------------------------------------
+!
+      parameter (jbuf=2)
+      parameter (jmw=1 + 2*jbuf)
+!
+!-----------------------------------------------------------------------
+!      num_rows_to_copy = number of northernmost rows to copy into
+!                         the southernmost rows of the MW when moving
+!                         the MW northward
+!-----------------------------------------------------------------------
+!
+      parameter (num_rows_to_copy = 2*jbuf)
+!
+!     nvar   = number of prognostic variables
+!     lseg   = maximum number of longitudinal stream function segments
+!     nlatpr = maximum number of latitudes for matrix printouts
+!              on diagnostic time steps
+!     nhreg  = number of regions in the horizontal used for averaging
+!              tracers.
+!     nvreg  = number of regions in the vertical used for term balance
+!              calculations. note "nvreg" isn`t used for tracer averages
+!     numreg = total number of regions ( = product of nhreg & nvreg)
+!              used for term balance calculations
+!
+      parameter (lseg=5, nlatpr=10)
+      parameter (nhreg=4, nvreg=6, numreg=nhreg*nvreg)
+      parameter (nvar=nt+2)
+!
+      parameter (imtm1=imt-1, imtm2=imt-2)
+      parameter (kmm1=km-1, kmp1=km+1)                                
+      parameter (jmtm1=jmt-1, jmtm2=jmt-2)
+      parameter (imtkm=imt*km, nwds=imt*jmt, nkflds=2)
+      parameter (nslab=imt*nvar*km, ntmin2=nt+1/nt)
+!
+!     parameter constants
+!
+!====================== include file "pconst.h" ========================
+!
+!
+!     rules for parameter constants
+!
+!     use prefix of "c" for whole real numbers (eg: c57 for 57.0)
+!     use "m" after prefix to designate negative values (minus sign)
+!       (eg: cm7 for -7.0)
+!     use prefix of "p" for non repeating fractions (eg: p5 for 0.5)
+!     use prefix of "r" for reciprocals (eg: r3 for 1/3.0)
+!     combine use of prefix above and "e" for scientific notation, with
+!       (eg: c5e4 for 5.0e4, c1em10 for 1.0e-10)
+!
+      parameter (c0=0.0, c1=1.0, c2=2.0, c3=3.0, c4=4.0, c5=5.0, c7=7.0)
+      parameter (c8=8.0)
+      parameter (c14=14.0, c16=16.0, c360=360.0)
+      parameter (p125=0.125, p25=0.25, p5=0.5, p75=0.75)
+      parameter (epsln=1.0e-20)
+!
+      parameter (c24=24.0, c60=60.0, c1440=1440.0)
+      parameter (r24=c1/c24, r60=c1/c60, r1440=c1/c1440)
+      parameter (secday=c1/(c60*c1440))
+
+!     minimum allowable thickness (cm) of the top cell when using the
+!     nonlinear free surface.        
+      parameter (thickmin=10.0)      
+!
+!     standard I/O units
+!
+!====================== include file "stdunits.h" ======================
+!
+!     stdin  = unit number for standard input.
+!     stdout = unit number for standard output.
+!     stderr = unit number for standard error.
+!
+      integer stdin, stdout, stderr
+      parameter (stdin = 5, stderr = 0)
+      common /stdunit/ stdout
+c====================== include file "accel.h" =========================
+c
+c     depth dependent tracer timestep acceleration multipliers used to
+c     hasten the convergence to equilibrium of the deeper portions of 
+c     ocean-climate models.  
+c
+c     accelerate abyssal processes by varying the length of the tracer 
+c     timestep with depth.  by using longer timesteps at depth, one can
+c     in effect reduce the heat capacity of the deeper levels and speed
+c     convergence to equilibrium.
+c     note:
+c     by applying this method, one is assuming that there is a single
+c     steady-state solution to the model being considered.
+c     also, since the diagnostic timestep calculations of "termbt" do 
+c     not attempt to account for depth variant timestep lengths, the 
+c     truncation error reported will increase, because it will include 
+c     the tracer changes due to variations in "dtxcel".
+c
+c     reference:
+c       Bryan, K., 1984: accelerating the convergence to equilibrium 
+c     of ocean climate models, J. Phys. Oceanogr., 14, 666-673. 
+c     ("dtxcel" here is the same as 1/gamma in the above reference)
+c     set "dtxcel" to 1.0 at the surface and for upper levels not 
+c     to be accelerated
+c     set "dtxcel" to values greater than 1.0 at deeper levels to
+c     accelerate convergence if above requirements are met
+c
+c     dtxcel   = model level dependent tracer timestep multipliers
+c     dtxsqr   = square root of "dtxcel" (used in computation of
+c                maximum slope constraint for isopycnal mixing)
+c#if !defined 1 || defined 
+c     dztxcl   = layer thickness divided by the timestep multiplier
+c                (needed for convection code)
+c     dzwxcl   = multiplication factor relating to the vertical
+c                distance between ts points, scaled according
+c                to timestep multipliers for use in convection code
+c#endif
+c     
+c     author:      k. dixon      e-mail=> kd@gfdl.gov
+c
+c
+      common /accel/ dtxcel(km)
+      common /accel/ dtxsqr(km)
+c#if !defined 1 || defined 
+      common /accel/ dztxcl(km), dzwxcl(km)
+c#endif
+c
+c====================== include file "coord.h" =========================
+c
+c                    model grid point coordinates
+c
+c     grid definition:
+c
+c     the model uses a staggard arakawa "b" grid which is setup and 
+c     generated by the "grids.F" module. 
+c
+c     xt(i)   = longitude of the ith "t" point in degrees.   i=1..imt
+c     xu(i)   = longitude of the ith "u,v" point in degrees. i=1..imt
+c     yt(j)   = latitude of the jth "t" point in degrees.    j=1..jmt
+c     yu(j)   = latitude of the jth "u,v" point in degrees.  j=1..jmt
+c     zt(k)   = distance from surface down to center of level k (in cm)
+c               (for depth of "t" and "u,v" grid points: k=1,km)
+c     zw(k)   = distance from surface down to bottom of level k (in cm)
+c               (for depth of "t" and "u,v" grid points: k=1,km)
+c     dxtdeg  = widths for "t" grid cells (degrees)
+c     dytdeg  = heights for "t" grid cells (degrees)
+c     dxudeg  = widths for "u" grid cells (degrees)
+c     dyudeg  = heights for "u" grid cells (degrees)
+c     dzt(k)  = vertical resolution of "t" and "u" grid cells (in cm)
+c     dzw(k)  = vertical resolution of "w" grid cells (in cm)
+c
+c     "i" increases in an eastward direction, "j" increases in a
+c     northward direction, and "k" increases downward.
+c     
+      common /coord/ xt(imt), yt(jmt), xu(imt), yu(jmt), zw(km), zt(km)
+      common /coord/ dxtdeg(imt), dytdeg(jmt), dzt(km)
+      common /coord/ dxudeg(imt), dyudeg(jmt), dzw(0:km)
+c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+! window size must be appropriate for options with highest order numerics
+
+
+
+
+! specify lomem or himem on 3D diagnostics. default is himem
+
+!these are used to determine hardware/OS/compiler (V. Balaji vb@gfdl.gov)
+
+
+
+!compilers that support Cray pointers
+
+!values of kind: double and long are 8-byte, float and int are 4-byte
+!these might be different on non-SGICRAY, I believe
+
+
+!parallel machine types
+
+c====================== include file "grdvar.h" ========================
+c
+c     variables which are functions of the grid defined by "coord.h"
+c
+c     dxt     = longitudinal width of "t" grid box at the 
+c               equator (in cm)
+c     dxtr    = reciprocal of "dxt"
+c     dxt2r   = reciprocal of "2*dxt"
+c     dxt4r   = reciprocal of "4*dxt"
+c     dxu     = longitudinal width of "u,v" grid box at the 
+c               equator (in cm)
+c     dxur    = reciprocal of "dxu"
+c     dxu2r   = reciprocal of "2*dxu"
+c     dxu4r   = reciprocal of "4*dxu"
+c     dxmetr  = reciprocal of "(dxt(i)+dxt(i+1))"
+c     duw     = xu(i) - xt(i)
+c     due     = xt(i+1) - xu(i)
+c     dus     = yu(jrow) - yt(jrow)
+c     dun     = yt(jrow+1) - yu(jrow)
+c
+c     dyt     = latitudinal height of "t" grid box (in cm)
+c     dytr    = reciprocal of "dyt"
+c     dyt2r   = reciprocal of "2*dyt"
+c     dyt4r   = reciprocal of "4*dyt"
+c     dyu     = latitudinal height of "u,v" grid box (in cm)
+c     dyur    = reciprocal of "dyu"
+c     dyu2r   = reciprocal of "2*dyu"
+c     dyu4r   = reciprocal of "4*dyu"
+c
+c     csu     = cosine of "u,v" grid point latitude
+c     csur    = reciprocal of "csu"
+c     cst     = cosine of "t" grid point latitude
+c     cstr    = reciprocal of "cst"
+c     phi     = latitude of "u,v" grid point in radians
+c     phit    = latitude of "t" grid point in radians
+c     sine    = sine of "u,v" grid point latitude
+c     tng     = tan of "u,v" grid point latitude
+c     fcor    = 2*omega*sine(j)
+c
+c     c2dzt(k)= "2*dzt"
+c     dztr(k) = reciprocal of dzt ("t" cell vertical resolution)
+c     dzt2r(k)= reciprocal of "2*dzt"
+c     dzwr(k) = reciprocal of dzw ("w" cell vertical resolution)
+c     dzw2r(k)= reciprocal of "2*dzw"
+c     dztur(k)= upper diffusion grid factor = 1.0/(dzw(k-1)*dzt(k))
+c     dztlr(k)= lower diffusion grid factor = 1.0/(dzw(k)*dzt(k))
+c     dzwur(k)= upper diffusion grid factor = 1.0/(dzt(k)*dzw(k))
+c     dzwlr(k)= lower diffusion grid factor = 1.0/(dzt(k+1)*dzw(k))
+c     fracdz(k,0) = fractional distance between grid point and cell top
+c     fracdz(k,1) = fractional distance between grid point and cell bot
+c     
+      common /grdvar/ dxt(imt),  dxtr(imt),  dxt2r(imt), dxu(imt)
+      common /grdvar/ dxur(imt), dxu2r(imt), dxu4r(imt), dxt4r(imt)
+      common /grdvar/ dyt(jmt),  dytr(jmt),  dyt2r(jmt), dyu(jmt)
+      common /grdvar/ dyur(jmt), dyu2r(jmt), dyu4r(jmt), dyt4r(jmt)
+      common /grdvar/ csu(jmt),  csur(jmt),  cst(jmt),   cstr(jmt)
+      common /grdvar/ cstdytr(jmt), cstdyt2r(jmt)
+      common /grdvar/ csudyur(jmt), csudyu2r(jmt)
+      common /grdvar/ cst_dytr(jmt), csu_dyur(jmt)
+      common /grdvar/ phi(jmt),  phit(jmt),  sine(jmt),  tng(jmt)
+      common /grdvar/ fcor(jmt), c2dzt(km),  dztr(km),   dzt2r(km) 
+      common /grdvar/ dzwr(0:km), dzw2r(0:km)
+      common /grdvar/ dxmetr(imt), duw(imt), due(imt)
+      common /grdvar/ dun(jmt), dus(jmt)
+      common /grdvar/ fracdz(km,0:1)
+      common /grdvar/ dztur(km), dztlr(km)
+c
+      common /grdvar/ quick_x(imt,2), curv_xp(imt,3), curv_xn(imt,3)
+      common /grdvar/ quick_y(jmt,2), curv_yp(jmt,3), curv_yn(jmt,3)
+      common /grdvar/ quick_z(km,2),  curv_zp(km,3),  curv_zn(km,3)
+c======================= include file "hmixc.h" ========================
+c
+c                    horizontal mixing coefficients
+c
+c     visc_cnu = viscosity coeff for northern face of U cell
+c     visc_ceu = viscosity coeff for eastern face of U cell
+c     diff_cnt = diffusion coeff for northern face of T cell
+c     diff_cet = diffusion coeff for eastern face of T cell
+c     
+c     am     = constant lateral viscosity coeff for momentum
+c     ah     = constant lateral diffusion coeff for tracers
+c     am3    = viscosity coeff for metric term on U cell
+c     am4    = another viscosity coeff for metric term on U cell
+c     ambi   = constant lateral biharmonic viscosity coeff for momentum
+c     ahbi   = constant lateral biharmonic diffusion coeff for tracers
+c
+c     author:   r.c.pacanowski     e-mail  rcp@gfdl.gov
+c=======================================================================
+c
+c-----------------------------------------------------------------------
+c     Terms for velocity 
+c-----------------------------------------------------------------------
+c
+      common /diffus0/ am3(jmt), am4(jmt,2)
+      common /diffus0/ am, ambi, ah, ahbi
+c
+c
+c     variable horizontal viscosity terms 
+c
+c     am_varh     = variable viscosity on NE corner of U cell
+c     varh_cu     = variable viscosity averaged to U cell
+c     varh_met    = extra metric term for U cell
+c     
+      common /diffus/ am_varh(imt,km,1:jmw-1)
+      common /diffus/ varh_met(imt,km,2:jmw-1)
+      common /diffus/ varh_cu(imt,km,2:jmw-1)
+      common /diffus0/ varh1(jmt,2), varh2(jmt,2)
+      common /diffus0/ varh3(jmt,2), varh4(jmt,2)
+      common /diffus/ visc_ceu(imt,km,2:jmw-1)
+      common /diffus/ visc_cnu(imt,km,1:jmw-1)
+c
+c
+c     Smagorinsky coefficients
+c
+c     k_smag      = overall scaling coeff
+c     diff_c_back = background diffusivity for T cell (cm**2/sec)
+c     visc_c_back = background viscosity   for U cell (cm**2/sec)
+c     prandtl     = ratio (viscosity/diffusivity)
+c
+      real k_smag
+      common /diffus0/  k_smag, diff_c_back, visc_c_back, prandtl
+c
+c-----------------------------------------------------------------------
+c     Terms for tracers
+c-----------------------------------------------------------------------
+c
+      common /diffus0/ diff_cnt, diff_cet
+c====================== include file "index.h" =========================
+c
+c    starting & ending indices for controlling where quantities
+c    are filtered. this removes the time step restriction due to
+c    convergence of meridians.
+c
+      common /indexr/ filter_reflat_n, filter_reflat_s
+c
+c====================== include file "iounit.h" ========================
+c
+c     i/o units and related variables
+c
+c     taum1disk = disk pointer for tau-1 latitude rows
+c     taudisk   = disk pointer for tau   latitude rows
+c     taup1disk = disk pointer for tau+1 latitude rows
+c     kflds     = disk unit used for two dimensional fields
+c     latdisk   = disk units for latitude rows (alternately pointed to 
+c                by taum1disk, taudisk, and taup1disk)
+c              
+c     iodoc  = unit for documentation
+c     iostab = unit for stability testing
+c     iotim  = unit for time means
+c     iotim1 = scratch disk (SSD) unit for accumulating time means
+c     ionew1 = unit for reading sponge layer data
+c     ionew2 = mirror unit of sponge layer data on SSD
+c     
+c     for the following, a control # < 0 implies that unformatted data
+c     will be written to a unit selected by the i/o manager "iomngr.F"
+c     and given a hardwired name (grep getunit *.F to see names) 
+c     and formatted data (to stdout) will be written. if a # > 0 and
+c      # <> stdout, only unformatted data will be written.
+c
+c     iotavg = control # for tracer averages
+c     iotmb  = control # for writing tracer meridional budget.
+c     iotrmb = control # for term balances for tracer and momentum
+c     ioglen = control # for writing global energetics integrals
+c     iovmsf = control # for writing meridional stream function
+c     iogyre = control # for writing gyre transport.
+c     ioprxz = control # for writing x-z sections from latitudes
+c     ioext  = control # for writing external mode (stream function)
+c     iodsp  = control # for writing diagnostic surface pressure
+c     iotsi  = control # for writing time step integrals
+c     ioxbt  = control # for writing time averaged xbt data
+c     iozmbc = control # for writing zonal mean surf boundary conditions
+c
+      integer taum1disk, taudisk, taup1disk
+      common /iounit/ taum1disk, taudisk, taup1disk
+      common /iounit/ latdisk(3), kflds
+      common /iounit/ iodoc, iostab, iotavg, iotmb, iotrmb
+      common /iounit/ iotim, iotim1
+      common /iounit/ ioglen, iovmsf, iogyre, ioprxz, ioext, iodsp
+      common /iounit/ iotsi, iozmbc, ionew1, ionew2, ioxbt
+c
+c     iotext  = 80 character text string for describing the details
+c                of the next unformatted data record.
+c     expnam  = 60 character text string for the experiment name
+c
+      character iotext*80, expnam*60
+      common /iounitc/ iotext, expnam
+c
+c     when writing unformatted data records in MOM, each data record is
+c     preceded by a header record which was written as:
+c     write(unit) stamp, iotext, expnam
+c     where stamp is a 32 character specification of the model date &
+c     time corresponding to the time step when the data was written and
+c     iotext is a 80 character description of what is in the
+c     data record and how it is to be read. expnam is a 60 character
+c     experiment name which shows which experiment wrote the data.
+c     this makes it easy to decipher any unformatted output from the
+c     model by using a program similar to the following: 
+c
+c      program decifr
+c
+c-----------------------------------------------------------------------
+c      decifer an unformatted file from MOM by showing the header
+c      records. the file needs to copied to file "fort.21"
+c-----------------------------------------------------------------------
+c
+c      character*32 stamp
+c      character*80 iotext
+c      character*60 expnam
+c
+c      iounit = 21
+c      rewind iounit
+c      do n=1,100000
+c
+c        read the header record
+c
+c        read (iounit, end=110) stamp, iotext, expnam
+c        write (*,'(1x,a32,1x,a80)') stamp, iotext
+c
+c        skip the data record
+c
+c        read (iounit)
+c      enddo
+c110   continue
+c      write (*,*) " => end of file on fort.",iounit
+c      stop
+c      end
+c
+c     note: all unformatted diagnostic MOM data is handled this way.
+c     to insure that data is read properly, verify that arrays are
+c     dimensioned correctly by comparing the listed variables against
+c     those in the *.h files. (grep -i -n "variable" *.h) Also, most
+c     data from MOM is written IEEE 32bit so it is read directly by
+c     most workstations. However, when trying to read these IEEE files
+c     on the CRAY, they must be assigned IEEE before being read.
+c     Some diagnostic data is averaged over time before being written.
+c     In these cases, the time "stamp" refers to the last time step
+c     at the end of the averaging period. An averaging interval is
+c     also written as part of the data. Averaging periods = zero 
+c     indicate instantaneous data.
+c
+c======================== include file "isopyc.h" ======================
+c
+c-----------------------------------------------------------------------
+c Set default ifdefs
+c-----------------------------------------------------------------------
+c
+c
+c
+c
+c
+c-----------------------------------------------------------------------
+c Arrays and scalars used for all isoneutral mixing schemes.
+c
+c Arrays
+c     drho     = d(rho)/d(tracer), where tracer is temp and salt.
+c                This is a quadratic polynomial defined in dens.h.
+c     ddxt     = tracer gradients at eastern face of T cells
+c     ddyt     = tracer gradients at northern face of T cells
+c     ddyt     = tracer gradients at bottom face of T cells
+c     fzisop   = vertical structure function for the mixing coefficients.
+c     redi_gm  = array to help set the elements of the mixing tensor. 
+c     agm      = array of gm diffusivity (cm**2/sec).  Must be 
+c                defined as (imt,jmt) unless wish to compute
+c                nonconstant diffusivity on every time step. 
+c                This field is saved in restart when running with 
+c                a nonconstant diffusivity scheme. 
+c
+c Scalars
+c     slmxr  = reciprocal of maximum allowable slope of isoneutrals for
+c              small angle Redi, for 1, and for
+c              biharmonic_rm.
+c     del_dm  = parameter for the dm_taper steep slope scheme
+c     s_dm    = parameter for the dm_taper steep slope scheme
+c
+c     ahisop  = isoneutral diffusivity (cm**2/sec) 
+c     athkdf  = GM diffusivity (cm**2/sec)
+c     abihrm  = Roberts and Marshall biharmonic diffusivity (cm**4/sec) 
+c     ahsteep = horizontal diffusivity used in the regions of
+c               steep slopes (cm**2/sec) 
+c-----------------------------------------------------------------------
+c
+      common /cisop/ drho(imt,km,jmw,2)
+      common /cisop/ ddxt(imt,km,2:jmw-1,2)
+      common /cisop/ ddyt(imt,km,1:jmw-1,2)
+      common /cisop/ ddzt(imt,0:km,jmw,2)
+c
+      common /cisopx/ fzisop(km), slmxr
+      common /cisopx/ redi_gm(6) 
+      common /cisopx/ del_dm, s_dmr 
+      common /cisopx/ ahisop
+      common /cisopx/ athkdf 
+      common /cisopx/ agm(imt,jmt) 
+      common /cisopx/ ahsteep
+      common /cisopx/ abihrm
+c
+c
+c-----------------------------------------------------------------------
+c Arrays for either Redi diffusion or Gent McWilliams stirring
+c     Ai_ez  = slope*diffusion coefficient on eastern face of T cell
+c     Ai_nz  = slope*diffusion coefficient on northern face of T cell
+c     Ai_bx  = slope*diffusion coefficient on bottom face of T cell
+c     Ai_by  = slope*diffusion coefficient on bottom face of T cell
+c-----------------------------------------------------------------------
+c
+      common /cisop/ Ai_ez(imt,km,2:jmw-1,0:1,0:1)
+      common /cisop/ Ai_nz(imt,km,1:jmw-1,0:1,0:1)
+      common /cisop/ Ai_bx(imt,km,2:jmw-1,0:1,0:1)
+      common /cisop/ Ai_by(imt,km,2:jmw-1,0:1,0:1)
+c
+c
+c
+c-----------------------------------------------------------------------
+c Arrays and scalars for just Redi diffusion
+c
+c Arrays
+c     K11,K22,K33 = diagonal components to the Redi diffusion tensor.
+c
+c Scalars
+c     delta_iso1  = grid factor which determines when to scale the 
+c                   full tensor's diffusivities. 
+c     s_minus,s_plus = slopes which determine the range over which 
+c                      need to scale the full tensor's diffusivities.
+c-----------------------------------------------------------------------
+c
+      real K11, K22, K33
+      common /cisop/ K11(imt,km,2:jmw-1)
+      common /cisop/ K22(imt,km,1:jmw-1)
+      common /cisop/ K33(imt,km,2:jmw-1)
+      common /cisopx/ delta_iso1, s_minus, s_plus 
+c
+c
+c-----------------------------------------------------------------------
+c Arrays for GM.  Note, the advection velocities are still needed 
+c with the default  approach, since generally wish to map 
+c these velocities in snapshots.
+c
+c     adv_vetiso = zonal isopycnal mixing velocity computed at the 
+c                  center of the eastern face of the "t" cells
+c     adv_vntiso = meridional isopycnal mixing velocity computed at
+c                  the center of the northern face of the "t" cells
+c                  (Note: this includes the cosine as in "adv_vnt")
+c     adv_vbtiso = vertical isopycnal mixing velocity computed at the
+c                  center of the top face of the "t" cells
+c     adv_fbiso  = "adv_vbtiso" * (tracer) evaluated at the center of
+c                  the bottom face of the "t" cells
+c-----------------------------------------------------------------------
+c
+      common /cisop/ adv_vetiso(imt,km,2:jmw-1)
+      common /cisop/ adv_vntiso(imt,km,1:jmw-1)
+      common /cisop/ adv_vbtiso(imt,0:km,2:jmw-1)   
+      common /cisop/ adv_fbiso(imt,0:km,2:jmw-1)   
+c
+c
+c
+c
+c     twice the thickness of quarter cells within T-cells
+c     0 is for upper quarter cell and 1 is for lower quarter cell
+c
+      common /cisop/ delqc(imt,km,jmw,0:1)
+c
+c
+c
+c======================= include file "mw.h" ===========================
+c
+c     Refer to the manual for a description of the memory window (MW)
+c
+c     author:  r.c.pacanowski   e-mail  rcp@gfdl.gov
+c=======================================================================
+c
+c     taum1 = tau-1 time level for variables in MW
+c     tau   = tau   time level for variables in MW
+c     taup1 = tau+1 time level for variables in MW
+c
+      integer taum1, tau, taup1
+      common /mwi/ taum1, tau, taup1
+c
+c-----------------------------------------------------------------------
+c     MW arrays for prognostic equations:
+c-----------------------------------------------------------------------
+c
+c     u(i,k,j,n,tau) = total velocity where:
+c      i   = index for longitude
+c      k   = index for depth
+c      j   = index for latitude row within MW
+c      n   = component (1 = zonal, 2 = meridional)
+c      tau = time level (tau-1, tau, tau+1)
+c             
+c      (only internal modes are on disk and at tau+1 in the MW)
+c
+c     t(i,k,j,n,tau) = tracer where:
+c      i   = index for longitude
+c      k   = index for depth
+c      j   = index for latitude row within MW
+c      n   = component (1 = temperature, 2 = salinity)
+c            if nt > 2 then other tracers are allowed.
+c      tau = time level (tau-1, tau, tau+1)
+c
+c     note: temperature is potential temperature in degrees Celsius and 
+c           salinity is in "model units", the deviation from 0.035 grams
+c           of salt/cm**3 of water, or, assuming a water density of
+c           1 gram/cm**3, the deviation from 0.035 g of salt/g of water.
+c           one can convert model units to the common units of parts
+c           per thousand (ppt) by adding 0.035 grams/cm**3 to the model
+c           units and then multiplying by 1000. 
+c     
+      common /mw/ u(imt,km,jmw,2,-1:1), t(imt,km,jmw,nt,-1:1)
+c
+c-----------------------------------------------------------------------
+c     MW arrays for diagnostic equations and workspace:
+c-----------------------------------------------------------------------
+c
+c     diagnostic advective velocities are in units of cm/sec
+c
+c     adv_vet  = advective velocity on the eastern face of a T cell
+c     adv_vnt  = advective velocity on the northern face of a T cell
+c     adv_veu  = advective velocity on the eastern face of a U cell
+c     adv_vnu  = advective velocity on the northern face of a U cell
+c     adv_vbt  = advective velocity on the bottom face of a T cell
+c     adv_vbu  = advective velocity on the bottom face of a U cell
+c
+c     rho      = density at center of a T cell in units of gm/cm**3
+c                note: there is an arbitrary constant which is only a
+c                function of depth in "rho". It is related to 
+c                subtracting a reference level density for purposes of
+c                accuracy.
+c
+c     pressure = hydrostatic pressure at the grid point within a T cell
+c     grad_p   = hydrostatic pressure gradient for U cell. There are
+c                two components: (1,2) is for (dp/dx, dp/dy)
+c
+      common /mw/ adv_vet(imt,km,2:jmw), adv_vnt(imt,km,1:jmw)
+      common /mw/ adv_veu(imt,km,2:jmw-1)
+      common /mw/ adv_vnu(imt,km,1:jmw-1)
+      common /mw/ adv_vbt(imt,0:km,2:jmw)
+      common /mw/ adv_vbu(imt,0:km,2:jmw-1)
+      common /mw/ rho(imt,km,1:jmw)
+      common /mw/ pressure(imt,km,1:jmw)
+      common /mw/ grad_p(imt,km,1:jmw-1,2)
+c
+c     tmask = tracer cell land/sea mask   = (0.0, 1.0) on (land, sea)
+c     umask = velocity cell land/sea mask = (0.0, 1.0) on (land, sea)
+c
+      common /mw/ tmask(imt,km,1:jmw), umask(imt,km,1:jmw)
+c
+      common /mw/ dht(imt,km,jmw+1), dhu(imt,km,jmw)
+      common /mw/ dhwt(imt,0:km,jmw)
+      common /mw/ pc_sink(imt,km,2:jmw-1)
+      common /mw/ ztp(imt,km,jmw)
+c
+c
+c     adv_f4n = 4th order advective flux
+c               
+      common /mw/ adv_f4n(imt,km,1:jmw-1,nt)
+c
+c
+c
+c     these workspace arrays are recalculated for each component of the
+c     equations so do not have to be moved as the MW moves northward. 
+c
+c     adv_fe   = advective flux across the eastern face of a cell
+c     adv_fn   = advective flux across the northern face of a cell
+c                (removed in most cases and put directly into the 
+c                 statement functions for speed optimization.)
+c     adv_fb   = advective flux across the bottom face of a cell
+c
+c     diff_fe  = diffusive flux across the eastern face of a cell
+c     diff_fn  = diffusive flux across the northern face of a cell
+c     diff_fb  = diffusive flux across the bottom face of a cell
+c     source   = source term
+c
+      common /mw/ adv_fe(imt,km,2:jmw-1)
+      common /mw/ adv_fn(imt,km,1:jmw-1)
+      common /mw/ adv_fb(imt,0:km,2:jmw-1)
+c
+      common /mw/ diff_fe(imt,km,2:jmw-1)
+      common /mw/ diff_fn(imt,km,1:jmw-1)
+      common /mw/ diff_fb(imt,0:km,2:jmw-1)
+      common /mw/ diff_fbiso(imt,0:km,2:jmw-1)
+c
+      common /mw/ source(imt,km,2:jmw-1)
+c
+      common /mw/ zzi(imt,km,2:jmw-1)
+c
+c     these grid factors are for optimizations
+c     
+      common /mw/ cstdxtr(imt,jmw), cstdxur(imt,jmw)
+      common /mw/ cstdxt2r(imt,jmw),ah_cstdxur(imt,jmw)
+      common /mw/ csudxtr(imt,jmw), csudxur(imt,jmw)
+      common /mw/ csudxu2r(imt,jmw),am_csudxtr(imt,jmw)
+c
+c     advmet = coeff for metric advection.
+c
+      common /advec/ advmet(jmt,2)
+c
+c
+c
+c     smf = surface momentum flux
+c          1 => zonal wind stress (dynes/cm**2)
+c          2 => meridional wind stress (dynes/cm**2)
+c     bmf = bottom momentum flux
+c          1 => zonal bottom drag (dynes/cm**2)
+c          2 => meridional bottom drag (dynes/cm**2)
+c     stf = surface tracer flux
+c          1 => surface heat flux (cal/cm**2/sec = cm*degC/sec = ly/sec)
+c          2 => surface salt flux (grams of salt/cm**2/sec)
+c     stf_turb 
+!         = the turbulent part of surface tracer flux
+c     btf = bottom tracer flux (for consistency but normally zero!)
+c          1 => bottom heat flux (cal/cm**2/sec = cm*degC/sec = ly/sec)
+c          2 => bottom salt flux (grams of salt/cm**2/sec)
+c
+      common /mw/ smf(imt,1:jmw,2),  bmf(imt,1:jmw,2)
+      common /mw/ stf(imt,1:jmw,nt), btf(imt,1:jmw,nt)
+      common /mw/ stf_turb(imt,1:jmw,nt)
+c
+c
+c====================== include file "scalar.h" ========================
+c
+c     various scalar quantities:
+c
+c     dtts   = time step for density & tracers (in seconds)
+c     dtuv   = time step for baroclinic velocity (in seconds)
+c     dtsf   = time step for barotropic velocity (in seconds)
+c     c2dtts = 2*dtts
+c     c2dtuv = 2*dtuv
+c     c2dtsf = 2*dtsf
+c     smooth = smoothing coefficient for robert time filter
+c     acor   = (>0, 0) = (implicit, explicit) treatment of coriolis
+c               term for internal and external modes.
+c     rho0   = mean density for Boussinesq approximation
+c     rho0r  = 1/rho0 
+c     omega  = earth`s rotation rate (radians/sec)
+c     radius = earth`s radius (cm)
+c     grav   = earth`s gravitational acceleration (cm/sec**2)
+c     cdbot  = bottom drag coefficient
+c     ncon   = number of  passes through convective code in tracer
+c     gcor   = time centering for coriolis term
+c
+c     taux0  = constant zonal windstress (dynes/cm**2) for idealized
+c              equatorial studies
+c     tauy0  = constant meridional windstress (dynes/cm**2) for
+c              idealized equatorial studies
+c
+      common /scalar/ dtts, dtuv, dtsf, c2dtts, c2dtuv, c2dtsf, acor
+      common /scalar/ smooth
+      common /scalar/ rho0, rho0r, omega, radius, grav, cdbot, gcor
+      common /scalar/ taux0, tauy0
+      common /scalri/ ncon
+c
+c     bring in non dimensional constants
+c
+c====================== include file "ndcon.h" ========================
+c
+c     various non dimensional quantities:
+c
+c     radian = degrees per radian
+c     pi     = something good to eat
+c
+      common /ndcon/ radian, pi
+c
+c
+!====================== include file "switch.h" ========================
+!
+!     all time dependent decisions are made by time manager "tmngr.F"
+!     and communicated elsewhere to the model via logical switches.
+!
+!     inputs: (defaulted in "blkdta.F", optionally reset via namelist)
+!
+!
+!     runlen  = integration period (see rununits). note "runlen" should
+!               be an integral number of density time steps. if not,
+!               then "runlen" is automatically adjusted to insure this.
+!               fractional days are supported but not fractional months
+!               or years.
+!     rununits= units of "runlen". may be "days", "months", or "years".
+!               tmngr will convert "runlen" which is in "rununits"
+!               to "rundays" in units of days.
+!
+!     segtim  = the integration time "runlen" is broken into a number of
+!               segments each of length "segtim" days. updated surface
+!               boundary conditions are applied to MOM every "segtim" 
+!               days. this is useful when coupling to atmospheric models
+!               in which case both models exchange surface boundary
+!               conditions every "segtim" days where "segtim"
+!               is 1/(coupling frequency). without an atmospheric model,
+!               when getting surface boundary conditions from data, 
+!               "segtim" is set to the time step (in days) by mom.F. in
+!               either case, "runlen" (in days) should be an integral
+!               number of "segtim".     
+!
+!     nmix    = number of time steps between mixing timesteps. used
+!               to damp timestep splitting due to centered leapfrog.
+!
+!     init    = (true,false)  indicates that this run is a
+!               (start from initial conditions, restart)
+!
+!     restrt  = (true,false) = (do,don`t) write a restart at the end
+!               of the run
+!
+!     eb      = (true,false) configures for the use of a 
+!               (euler backward,forward) type mixing timestep
+!
+!-----------------------------------------------------------------------
+!     inputs to tmngr.F: diagnostic intervals
+!-----------------------------------------------------------------------
+!
+!     note: switches are used to control the interval between doing
+!           diagnostics. units for all switches are in days. 
+!           setting a switch < 0.0 disables its diagnostic 
+!           setting a switch = 0.0 causes the diagnostic to be 
+!           done every time step, and setting a switch > 0.0 causes the
+!           diagnostic to be done repeatedly at the specified interval
+!           from a specified starting date. 
+!
+!     cmixint = number of days between writing estimated mixing coeffs
+!               on faces of T cells and U cells
+!
+!     crossint = number of days between writing diapycnal and isopycnal
+!               components of flow
+!
+!     fctint = number of days between writing difference between 
+!              FCT and leapfrog advection
+!
+!     pressint = number of days between writing pressure field 
+!
+!     exconvint = number of days between writing temperature rate of
+!                 change due to explicit convection
+!
+!     glenint =  number of days between global energetics integrals.
+!
+!     trmbint =  number of days between momentum and tracer term
+!                balances (global and regional).
+!
+!     itrmb   = (true,false) = (do,don`t) write regional mask info for
+!               the term balance diagnostic. Typically set true
+!               at the beginning of a run; otherwise false since it is
+!               not necessary to keep writing a time independent field
+!               particularly when it may be a significant part of the
+!               time dependent part of the diagnostic.
+!
+!     gyreint =  number of days between calculation of tracer northward
+!                transport.
+!     igyre   = (true,false) = (do,don`t) write regional mask info for
+!               the gyre diagnostic. Typically set true
+!               at the beginning of a run; otherwise false since it is
+!               not necessary to keep writing a time independent field
+!               particularly when it may be a significant part of the
+!               time dependent part of the diagnostic.
+!
+!     vmsfint =  number of days between calculation of vertical and
+!                meridional stream function.
+!
+!     tyzint  =  number of days between calculation of zonally averaged
+!                tracer components.
+!
+!     rhoint  = number of days between writing instantaneous terms 
+!               in the locally referenced potential density equation.
+!               Relevant only when 
+!               "save_density_terms"
+!               is enabled. see "iounit.h" for more details.
+!               all data is at time level "tau" so it is one time step
+!               before the date shown in "stamp".
+!
+!     diffint   = number of days between computing nonconstant 
+!               diffusivity.
+!
+!     diffsnapint = number of days between saving nonconstant 
+!               diffusivity information to netcdf file.
+!
+!     prxzint =  number of days between printouts of x-z data.
+!
+!     extint  =  number of days between printouts of external mode.
+!
+!     dspint  =  number of days between surface pressure calculation.
+!                Note: only when "diagnostic_surface_height" is enabled.
+!     dspper  = averaging period for "diagnostic_surface_height"
+!
+!     tavgint = number of days between regional tracer averages (under
+!               horizontal regions).
+!
+!     itavg   = (true,false) = (do,don`t) write regional mask info for
+!               the tracer average diagnostic. Typically set true
+!               at the beginning of a run; otherwise false since it is
+!               not necessary to keep writing a time independent field
+!               particularly when it may be a significant part of the
+!               time dependent part of the diagnostic.
+!
+!     tmbint  = number of days over which tracer equation in averaged
+!               in depth and longitude to determine the meridional 
+!               balance among storage, divergence, dissipation and 
+!               forcing.
+!     tmbper  = averaging period for "meridional_tracer_balance"
+!
+!     itmb    = (true,false) = (do,don`t) write "msktmb" for tracer
+!               the meridional balance diagnostic. Typically set true
+!               at the beginning of a run; otherwise false since it is
+!               not necessary to keep writing a time independent field
+!               particularly when it may be a significant part of the
+!               time dependent part of the diagnostic.
+!
+!
+!     tsiint  = number of days between printing of time step integrals.
+!
+!     stabint = number of days between sampling for various stability
+!               criteria.
+!
+!     snapint = number of days between writing instantaneous samples
+!               of data from the MOM grid. note: only when "snapshots"
+!               is enabled. see "iounit.h" for more details.
+!               all data is at time level "tau" so it is one time step
+!               before the date shown in "stamp".
+!
+!     timavgint= interval (days) for writing time mean data
+!               (only when "time_averages" is enabled). 
+!               if "timavgint" is not an integral number of
+!               density time steps,"timavgint" is automatically adjusted
+!               to insure this. if the number of days to integrate is
+!               not an integral number of "timavgint" then the last
+!               averaging period will be less than "timavgint" days.this
+!               may lead to one more averaging period than expected. 
+!               see "iounit.h" for more details.
+!     timavgper= averaging period for "time_averages"
+!
+!     xbtint  = averaging period (days) for writing XBT data (only when
+!               "xbts" is enabled). if "xbtint" is not an integral
+!               number of density time steps, "xbtint" is automatically
+!               adjusted to insure this. if the number of days to 
+!               integrate is not an integral number of "xbtint" then the
+!               last averaging period will be less than "xbtint" days.
+!               this may lead to one more averaging period than  
+!               expected. see "iounit.h" for more details.
+!     xbtper  = averaging period for "xbts"
+!
+!     zmbcint = number of days between calculation of zonal mean
+!               surface boundary conditions (and related  quantities)
+!
+!     trajint = number of days between writing particle trajectories.
+!               particle trajectories are always written on the last
+!               time step of the run to allow for restarting.
+!
+!-----------------------------------------------------------------------
+!     outputs from tmngr.F: logical switches
+!-----------------------------------------------------------------------
+!
+!     rundays = integration time in days (from "runlen")
+!
+!     the following are logical counterparts to the above switches and
+!     are set every time step. logical switches control all decisions
+!     about when to do things in MOM.
+!
+!     cmixts  = (false,true) = (don`t, do) do write estimated mixing
+!               coefficients on this time step.
+!               based on "cmixint".
+!
+!     crossts  = (false,true) = (don`t, do) write diapycnal and 
+!               isopycnal components of flow on this time step.
+!               based on "crossint".
+!
+!     fctts    = (false,true) = (don`t, do) write difference between 
+!               FCT and leapfrog advection on this time step.
+!               based on "fctint".
+!
+!     pressts  = (false,true) = (don`t, do) write pressure on this time
+!               step. based on "pressint".
+!               
+!
+!     exconvts  = (false,true) = (don`t, do) do write temperature change
+!               due to explicit convection on this time step.
+!               based on "exconvint".
+!
+!     glents  = (false,true) = (don`t, do) do calculation of global
+!               energy integrals on this time step. based on "glenint".
+!
+!     trmbts  = (false,true) = (don`t, do) do calculation of momentum &
+!               tracer term balance on this timestep. based on "trmbint"
+!
+!     gyrets  = (false,true) = (don`t, do) do calculation of tracer
+!               northward transport on this timestep. based on "gyreint"
+!
+!     vmsfts  = (false,true) = (don`t, do) do calculation of vertical
+!               and meridional stream function on this time step.
+!               based on "vmsfint"
+!
+!     tyzts   = (false,true) = (don`t, do) do calculation of zonally
+!               averaged tracer components on this time step.
+!               based on "tyzint"
+!
+!     prxzts  = (false,true) = (don`t, do) do printouts of x-z data
+!               on this time step. based on "prxzint"
+!
+!     extts  = (false,true) = (don`t, do) do printout of external mode
+!               on this time step. based on "extint"
+!
+!     dspts  = (false,true) = (don`t, do) do calculation of diagnosti! 
+!              surface pressure on this time step. based on "dspint"
+!               
+!     rhots  = (false,true) =(don`t, do) do calculation of diagnostic
+!              for locally referenced potential density terms.
+!              Based on "rhoint".
+!
+!     diffts    = (false,true) =(don`t, do) do calculation of new 
+!              nonconstant diffusivity.
+!              Based on "diffint".
+!
+!     diffsnapts = (false,true) =(don`t, do) save fields related 
+!              to nonconstant diffusivity calculation.
+!              Based on "diffsnapint".
+!
+!     stabts  = (false,true) = (don`t, do) test for stability on this
+!               time step. based on "stabint"
+!
+!     tavgts  = (false,true) = (don`t do) do tracer averages on this
+!               time step. based on "tavgint"
+!
+!     tmbts   = (false,true) = (don`t, do) write out tracer meridional .
+!               balance on this time step. based on "tmbint"
+!
+!     tsits   = (false,true) = (don`t, do) print time step integrals
+!               on this time step. based on "tsiint"
+!
+!     zmbcts  = (false,true) = (don`t, do) print zonal mean boundary
+!               conditions on this time step.  based on "zmbcint"
+!
+!     trajts  = (false,true) = (don`t, do) print particle trajectories
+!               on this time step. based on "trajint"
+!
+!     snapts  = (false,true) = (don`t, do) save a snapshot of the data
+!               on this time step. based on "snapint"
+!
+!     timats  = (false,true) = (don`t, do) write time mean data
+!               on this time step. based on "timavgint"
+!                                          
+!     xbtts   = (false,true) = (don`t, do) write averaged XBT data on
+!               this time step based on "xbtint"
+!
+!
+!     leapfrog= (false,true) on a (mixing, normal leapfrog) time step
+!                based on "nmix"
+!                                          
+!     euler1  = true on the 1st pass of an euler backward time step
+!               otherwise false. (applies when "eb" = true)
+!     euler2  = true on the 2nd pass of an euler backward time step
+!               otherwise false. (applies when "eb" = true)
+!     forward = true on a forward time step. otherwise false
+!		(applies when "eb" = false)		  
+!                                          
+!
+!     the following logical switches are based on the model time step
+!     and not on a specified interval in days. 
+!    
+!     first   = (true,false) =  when it`s (the first, not the first)
+!                               time step of a run
+!     eots    = end of a time step. always true except for first
+!               pass of an euler backward time step
+!     eorun   = last time step of a run. always false except during the
+!               last time step of the run.
+!
+!     eoday   = true when within 1/2 time step of the end of a day
+!               else ... false
+!     midmon  = true when within 1/2 time step of the middle of a month
+!               else ... false
+!     eomon   = true when within 1/2 time step of the end of a month
+!               else ... false
+!     eoyear  = true when within 1/2 time step of the end of a year
+!               else ... false
+!     osegs   = true on the 1st time step of an ocean segment in mom.F
+!               otherwise false.
+!     osege  =  true on the last time step of an ocean segment in mom.F
+!               otherwise false.
+!
+!     author:      r. c. pacanowski      e-mail=> rcp@gfdl.gov
+!
+!
+      logical eb, leapfrog, euler1, euler2, forward, eots
+      logical init, first, restrt
+      logical itavg, itmb, itrmb, igyre
+      character *8 rununits
+!
+      common /switcc/ rununits
+      common /switcr/ runlen, rundays
+      common /switci/ nmix
+      common /switcl/ eb, leapfrog, euler1, euler2, forward, eots
+      common /switcl/ init, first, restrt
+      common /switcl/ itavg, itmb, itrmb, igyre
+!
+      logical          eoday, eomon, midmon, eoyear, eorun
+      common /switcl/  eoday, eomon, midmon, eoyear, eorun
+!
+c====================== include file "casimsw.h" ========================
+c
+c     holds switching information for assimilation
+c     defaults and namelist settings are handled in setassim.F
+c     it is "included" in switch.h
+c
+c     rassim  = true when within 1/2 time step of a specified interval
+c               else ... false
+c     rassint = interval in days for triggering a new assimilation
+c
+      logical rassim
+      common /switcr/ rassint
+      common /switcl/ rassim
+c
+!
+!-----------------------------------------------------------------------
+!
+!     S W I T C H E S    B A S E D    O N    A N    I N T E R V A L
+!
+!     each interval switch needs two variables in common. The 
+!     following naming convention is used.
+!
+!         1) an interval (real) for diagnosti! output (e.g,.  glenint)
+!         2) a switch (logical) for the interval (e.g.,  glents )
+!
+!-----------------------------------------------------------------------
+!
+      logical           tavgts,    glents,    trmbts,   prxzts
+      common /switcr/   tavgint,   glenint,   trmbint,  prxzint
+      common /switcl/   tavgts,    glents,    trmbts,   prxzts
+!
+      logical          extts,   trajts,   exconvts,   cmixts
+      common /switcr/  extint,  trajint,  exconvint,  cmixint
+      common /switcl/  extts,   trajts,   exconvts,   cmixts
+!
+      logical          vmsfts,   gyrets,    tsits,   snapts,   fctts
+      common /switcr/  vmsfint,  gyreint,   tsiint,  snapint,  fctint
+      common /switcl/  vmsfts,   gyrets,    tsits,   snapts,   fctts
+!
+      logical          tyzts
+      common /switcr/  tyzint
+      common /switcl/  tyzts
+!
+      logical          stabts,   zmbcts,   crossts,   pressts
+      common /switcr/  stabint,  zmbcint,  crossint,  pressint
+      common /switcl/  stabts,   zmbcts,   crossts,   pressts
+!
+      logical          osegs,  osege
+      common /switcr/          segtim
+      common /switcl/  osegs,  osege
+!
+      logical          rhots
+      common /switcr/  rhoint
+      common /switcl/  rhots
+!
+      logical          diffts,  diffsnapts
+      common /switcr/  diffint, diffsnapint
+      common /switcl/  diffts,  diffsnapts
+!   
+!-----------------------------------------------------------------------
+!
+!     S W I T C H E S    B A S E D    O N    A N    I N T E R V A L
+!
+!              A N D   A V E R A G I N G   P E R I O D
+!
+!     each averaging period switch needs four variables in common. The 
+!     following naming convention is used.
+!
+!         1) an interval (real) for diagnostic output    (e.g. xbtint  )
+!         2) a switch (logical) for the interval         (e.g. xbtts   )
+!         3) an averaging period (real)                  (e.g. xbtper  )
+!         4) a switch (logical) for accumulating         (e.g. xbtperts)
+!
+!
+!     The user must specify the interval [e.g., xbtint] for diagnostic
+!     output in units of days and the averaging period [e.g., xbtper] 
+!     in units of days. The averaging period may be less than or equal
+!     to the interval. For example, if the interval is 30.0 days and the
+!     averaging period is 5.0 days, results will be averaged over all
+!     time steps within days 26, 27, 28, 29, and 30. An averaging period
+!     of 0.0 days averages over the last time step of the interval (as
+!     does xbtper = dt), and an averaging period less than zero turns
+!     the switches off for all time steps.  
+!
+!     The logical switch for writing output at the specified interval 
+!     [e.g., xbtts] is set to true on the last time step of the 
+!     averaging period. The logical switch for accumulating results
+!     [e.g., xbtperts] is true for all time steps within the averaging
+!     period, otherwise it is false. 
+!
+!-----------------------------------------------------------------------
+!
+      logical         xbtts,     dspts,    tmbts,    timavgts
+      logical         xbtperts,  dspperts, tmbperts, timavgperts
+      common /switcr/ xbtint,    dspint,   tmbint,   timavgint
+      common /switcr/ xbtper,    dspper,   tmbper,   timavgper
+      common /switcl/ xbtts,     dspts,    tmbts,    timavgts
+      common /switcl/ xbtperts,  dspperts, tmbperts, timavgperts
+!====================== include file "taskrows.h" ======================
+!
+!     max_tasks      = maximum number of processors
+!     num_processors = requested number of processors
+!     pn             = this processor number (from 1 to num_processors)
+!
+!     jstask3(n)  = southernmost buffer jrow for processor "n"
+!     jetask3(n)  = northernmost buffer jrow for processor "n"
+!     jscomp3(n)  = southernmost computed jrow for processor "n"
+!     jecomp3(n)  = northernmost computed jrow for processor "n"
+!     num_loads3(n)= number of times processor "n`s" MW is loaded
+!     window_size3(n)= the size of the memory window for processor "n"
+!
+!     jstask  = southernmost buffer jrow for this processor (pn)
+!     jetask  = northernmost buffer jrow for this processor (pn)
+!     jscomp  = southernmost computed jrow for this processor (pn)
+!     jecomp  = northernmost computed jrow for this processor (pn)
+!     num_loads= number of times processor "pn`s" MW is loaded
+!     window_size= the size of the memory window for this processor (pn)
+!                  It is set as follows:
+!                  if defined max_window then
+!                    jecomp3-jscomp3+1 + 2*jbuf
+!                    for second, fourth, and sixth order windows
+!                    on processor "pn". The window_size must be the
+!                    same on all processors. 
+!                  else
+!                    3 (for second order windows)
+!                    5 (for fourth order windows)
+!                    7 (for sixth order windows)
+!                    regardless of the number of processors
+!                  endif
+!
+      parameter (max_tasks = 2048)
+      integer pn, window_size3, window_size
+      common /taskrows/ pn
+      common /taskrows/ num_processors
+      common /taskrows/ jstask3(max_tasks), jetask3(max_tasks)
+      common /taskrows/ jscomp3(max_tasks), jecomp3(max_tasks)
+      common /taskrows/ num_loads3(max_tasks)
+      common /taskrows/ jstask, jetask, num_loads, jscomp, jecomp
+      common /taskrows/ window_size3(max_tasks), window_size
+c====================== include file "vmixc.h" =========================
+c
+c         vertical mixing coefficients and related variables
+c
+c     kappa_h = constant vertical diffusion coefficient (cm**2/sec)
+c     kappa_m = constant vertical viscosity coefficient (cm**2/sec)
+c
+c     visc_cbu  = viscosity coeff at bottom of U cell (cm**2/sec) 
+c     diff_cbt  = diffusion coeff at bottom of T cell (cm**2/sec)
+c     visc_cbu_limit = largest allowable "visc_cbu" 
+c     diff_cbt_limit = largest allowable "diff_cbt" 
+c     aidif = coefficient for implicit time differencing for
+c             vertical diffusion. aidif=1 gives the fully implicit
+c             case. aidif=0 gives the fully explicit case
+c             note: not used unless "implicitvmix" or "isoneutralmix"
+c                   is enabled
+c
+c     author:   r.c.pacanowski     e-mail  rcp@gfdl.gov
+c=======================================================================
+c
+c
+c     set parameter nsmix to allow for double diffusion
+c
+      parameter ( nsmix=2 ) 
+      real kappa_h,  kappa_m
+      common /vmixr0/ visc_cbu_limit, diff_cbt_limit, aidif
+      common /vmixr0/ kappa_h, kappa_m
+      common /vmixr1/ visc_cbu(imt,km,2:jmw-1)
+      common /vmixr1/ diff_cbt(imt,km,2:jmw-1,nsmix)
+c
+      common /vmixr0/ Ahv(km)
+c
+c
+c
+c-----------------------------------------------------------------------
+c
+c
+c-----------------------------------------------------------------------
+c     Define various parameters and common blocks for kmix vertical-
+c     mixing scheme; used in "kmixs.F" subroutines
+c-----------------------------------------------------------------------
+c
+c
+c     jwtype    = Jerlov water type        (1 to 5)
+c     ghats     = nonlocal transport           (s/cm^2)
+c     hbl       = boundary layer depth (cm)
+c     bfsfc     = surface buoyancy forcing     (cm^2/s^3)
+c     ws        = scalar velocity scale
+c     wm        = momentum velocity scale
+c     caseA     = = 1 in case A; =0 in case B
+c     stable    = = 1 in stable forcing; =0 in unstable
+c     dkm1      = boundary layer difs at kbl-1 level
+c     blmc      = boundary layer mixing coefficients
+c     sigma     = normalized depth (d / hbl)
+c     rhosfc    = potential density of sfc layer (g/cm^3)
+c     talpha    = d(rho)/ d(pot.temperature)   (g/cm^3/C)
+c     sbeta     = d(rho)/ d(salinity)        (g/cm^3/PSU)
+c     alphaDT   = alpha * DT  across interfaces  (g/cm^3)
+c     betaDS    = beta  * DS  across interfaces  (g/cm^3)
+c     ustar     = surface friction velocity        (cm/s)
+c     Bo        = surface turb buoy. forcing   (cm^2/s^3)
+c     Bosol     = radiative buoy forcing       (cm^2/s^3)
+c     dbloc     = local delta buoy at interfaces (cm/s^2)
+c     dbsfc     = delta buoy w/ respect to sfc   (cm/s^2)
+c     kbl       = index of first grid level below hbl
+c
+c-----------------------------------------------------------------------
+c
+      common /vmixr3/ ws(imt,2:jmw-1), wm(imt,2:jmw-1)
+      common /vmixr3/ Bo(imt,2:jmw-1), Bosol(imt,2:jmw-1)
+      common /vmixr3/ jwtype(imt,2:jmw-1)
+      common /vmixr3/ dbloc(imt,km,2:jmw-1), dbsfc(imt,km,2:jmw-1)
+      common /vmixr3/ bfsfc(imt,2:jmw-1), ustar(imt,2:jmw-1)
+      common /vmixr3/ caseA(imt,2:jmw-1), stable(imt,2:jmw-1)
+      common /vmixr3/ sigma(imt,2:jmw-1), rhosfc(imt,2:jmw-1)
+      common /vmixr3/ talpha(imt,km,2:jmw-1), sbeta(imt,km,2:jmw-1)
+      common /vmixr3/ alphaDT(imt,km,2:jmw-1),betaDS(imt,km,2:jmw-1)
+      common /vmixr3/ dkm1(imt,2:jmw-1,3), blmc(imt,km,2:jmw-1,3)
+      common /vmixr3/ dVsq(imt,km,jmw), Rib(imt,2,2:jmw-1)
+      common /vmixr3/ kbl(imt,2:jmw-1), hbl(imt,2:jmw-1)
+      common /vmixr3/ ghats(imt,km,2:jmw-1)
+      common /vmixr3/ gat1(imt,2:jmw-1,3), dat1(imt,2:jmw-1,3)
+c
+c-----------------------------------------------------------------------
+c     parameters for several subroutines
+c
+c     epsilon = nondimensional extent of the surface layer = 0.1
+c     vonk    = von Karman`s constant                      = 0.4
+c     conc1,conam,concm,conc2,zetam,conas,concs,conc3,zetas
+c             = scalar coefficients
+c     lri     = logical switch for shear instability mixing
+c     ldd     = logical switch for double-diffusive mixing
+c-----------------------------------------------------------------------
+c
+      logical lri,ldd
+      common /kmixcom/ epsilon, vonk, conc1, conam, concm, conc2
+     &,                zetam, conas, concs, conc3, zetas, lri, ldd
+c
+c-----------------------------------------------------------------------
+c     parameters for subroutine "bldepth"
+c
+c
+c     to compute depth of boundary layer:
+c
+c     Ricr    = critical bulk Richardson Number            = 0.3
+c     cekman  = coefficient for ekman depth                = 0.7 
+c     cmonob  = coefficient for Monin-Obukhov depth        = 1.0
+c     concv   = ratio of interior buoyancy frequency to 
+c               buoyancy frequency at entrainment depth    = 1.8
+c     hbf     = fraction of bounadry layer depth to 
+c               which absorbed solar radiation 
+c               contributes to surface buoyancy forcing    = 1.0
+c     Vtc     = non-dimensional coefficient for velocity
+c               scale of turbulant velocity shear
+c               (=function of concv,concs,epsilon,vonk,Ricr)
+c-----------------------------------------------------------------------
+c
+      common /kmixcbd/ Ricr, cekman, cmonob, concv, hbf, Vtc
+c
+c-----------------------------------------------------------------------
+c     parameters and common arrays for subroutines "kmixinit" 
+c     and "wscale"
+c
+c
+c     to compute turbulent velocity scales:
+c
+c     nni     = number of values for zehat in the look up table
+c     nnj     = number of values for ustar in the look up table
+c
+c     wmt     = lookup table for wm, the turbulent velocity scale 
+c               for momentum
+c     wst     = lookup table for ws, the turbulent velocity scale 
+c               for scalars
+c     deltaz  = delta zehat in table
+c     deltau  = delta ustar in table
+c     zmin    = minimum limit for zehat in table (cm3/s3)
+c     zmax    = maximum limit for zehat in table
+c     umin    = minimum limit for ustar in table (cm/s)
+c     umax    = maximum limit for ustar in table
+c-----------------------------------------------------------------------
+c
+      parameter (nni = 890, nnj = 480)
+c
+      common /kmixcws/ wmt(0:nni+1,0:nnj+1), wst(0:nni+1,0:nnj+1),
+     &                 deltaz, deltau, zmin, zmax, umin, umax
+c
+c-----------------------------------------------------------------------
+c     parameters for subroutine "ri_iwmix"
+c
+c
+c     to compute vertical mixing coefficients below boundary layer:
+c
+c     Riinfty = local Richardson Number limit 
+c               for shear instability                      = 0.7
+c     visc_cbu_limit = viscosity max due to shear instability     
+c     diff_cbt_limit = diffusivity ..  
+c     visc_cbu_iw    = viscosity background due to internal waves  
+c     diff_cbt_iw    = diffusivity ..     
+c     visc_con_limit = viscosity due to convective instability
+c     diff_con_limit = diffusivity ..
+c     visc_cbt       = viscosity coeff at bottom of "T" cell
+c-----------------------------------------------------------------------
+c
+      common /kmixcri/ Riinfty
+     &,                 visc_cbu_iw, diff_cbt_iw
+     &,                 visc_con_limit, diff_con_limit
+c
+c-----------------------------------------------------------------------
+c     parameters for subroutine "ddmix"
+c
+c
+c     to compute additional diffusivity due to double diffusion:
+c
+c     Rrho0   = limit for double diffusive density ratio
+c     dsfmax  = maximum diffusivity in case of salt fingering (m2/s)
+c-----------------------------------------------------------------------
+c
+      common /kmixcdd/ Rrho0, dsfmax
+c
+c-----------------------------------------------------------------------
+c     parameters for subroutine "blmix"
+c
+c
+c     to compute mixing within boundary layer:
+c
+c     cstar   = proportionality coefficient for nonlocal transport
+c     cg      = non-dimensional coefficient for counter-gradient term
+c-----------------------------------------------------------------------
+c
+      common /kmixcbm/ cstar, cg
+      integer(kind=8) :: icg, jcg
+      common / checks_common / icg, jcg, cgmax, gridmin, sml
+c
+c-----------------------------------------------------------------------
+c     do consistency checks before allowing MOM to continue
+c         
+c     author:   R. C. Pacanowski     e-mail=> rcp@gfdl.gov
+c    (mpp items)   v. balaji         e-mail=> vb@gfdl.gov
+c-----------------------------------------------------------------------
+c
+      write (stdout,'(/,20x,a,/,8x,a,a,/)')
+     & 'G E N E R A L    C O N S I S T E N C Y    C H E C K S'
+     &,'(A "rudimentary intelligence" analysis of all specifications'
+     &,' and their interactions)'
+c
+c
+c     explicit free surface option checks
+c
+      write(stdout,9000)
+     & '==> Warning: Option explicit_free_surface_nonlinear is enabled.'
+     &,'             dzt(k=1)+eta must be positive in order to        '
+     &,'             preclude vanishingly small top cell thicknesses. '
+     &,'             If dzt(k=1)+eta < 0, the model will not conserve '
+     &,'             first moments.                                   '
+      write(stdout,*) 
+     & '             A nominal minimum thickness of ', thickmin,'(cm) '
+      write(stdout,9000)     
+     & '             is used to keep the model from blowing up in case'
+     &,'             of extremely small top cell thicknesses.         '
+     &,'             Yet if the model is producing such thin top cells,'
+     &,'             you should investigate the reason for such.       '
+      if(dtuv .ne. dtts) then
+      write(stdout,9000)
+     & '==> Warning: Option explicit_free_surface_nonlinear is enabled'
+     &,'             yet dtts is not equal to dtuv.  In order to      '
+     &,'             have a conservative model, set dtts=dtuv.        '
+      endif
+
+	  write (stdout,9000)
+     & '==> Warning: because options explicit_eb or explicit_efb have '
+     &,'             not been enabled, the explicit free surface '
+     &,'             solution will be time averaged over two baroclinic'
+     &,'             timesteps to keep the barotropic solution defined'
+     &,'             at the same time as the baroclinic solution. This'             
+     &,'             will allow stretching of tracer timesteps relative'
+     &,'             to baroclinic timesteps.'
+c
+c     fresh water flux option checks
+c
+c
+c
+c
+c       options which have not been parallelized  
+c
+      if (imt .lt. 3) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error:  parameter "imt" less than 3 is not allowed'        
+        errorc = .true.
+      endif
+c
+      if (jmt .lt. 4) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error:  parameter "jmt" less than 4 is not allowed'        
+        errorc = .true.
+      endif
+      if (num_processors .gt. 1 .and. num_processors .le. jmt-2) then
+        write (stdout,'(/,1x,a,i4,a)')
+     & '==> Warning:  "num_processors" =',num_processors
+     &,' implies multi-tasking (parallel processing)'
+      elseif (num_processors .eq. 1) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Warning:  "num_processors" = 1 implies unitasking          '
+      elseif (num_processors .gt. jmt-2 .or. num_processors .lt. 1) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error:  "num_processors" cannot be > jmt-2 or < 1          '
+        write (stdout,*)' num_processors = ',num_processors
+        write (stdout,*) 
+     &  'num_processors is set via namelist "procs" in run script '
+	errorc = .true.
+      endif
+c
+c
+c     more options not checked out in parallel
+c
+c
+c     some misc option checks
+c
+      if(smooth .le. 0.0) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: The smooth parameter for robert_time_filter is      '
+     &,'           currently set <= 0.0. Model will eventually go      '
+     &,'           unstable with this setting. A value of smooth=0.01  '
+     &,'           should be sufficient for numerical stability.       '
+        errorc = .true.
+      endif
+c
+c
+c       Check for obsolete options
+c
+c
+c Check initial condition options
+c
+      n = 0
+      n = n + 1
+c mjh
+      if (n .ne. 1) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error:  Either "levitus_ic" or "idealized_ic" or "read_ic"'
+     &,'            or "equatorial_thermocline" must be enabled.      '
+     &,'             choose only one for initial conditions.          '
+        errorc = .true.
+      endif
+c
+c     Check boundary condition options
+c
+c
+      n = 0
+      n = n + 1
+      if (n .ne. 1) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error:  Either "simple_sbc" or "time_mean_sbc_data" or    '
+     &,'            "time_varying_sbc_data" or "coupled" must be      '
+     &,'             enabled. choose one surface boundary condition   '
+        errorc = .true.
+      endif
+c
+c     Check lateral mixing options
+c 
+      if (htr_mixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: "tracer_horz_mix_const"  cannot be enabled        '
+     &,'    because another horizontal mixing scheme has been enabled.'
+        errorc     = .true.
+      else
+        htr_mixset = .true.
+      endif
+      if (.not.htr_mixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: No horizontal tracer diffusivity scheme enabled.  '
+        errorc = .true.
+      endif
+      if (hvel_mixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: "velocity_horz_mix_var"  cannot be enabled        '
+     &,'    because another horizontal mixing scheme has been enabled.'
+        errorc     = .true.
+      else
+        hvel_mixset = .true.
+      endif
+      if (.not.hvel_mixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: No horizontal velocity viscosity scheme enabled.  '
+        errorc = .true.
+      endif
+c
+c     Check vertical mixing options
+c
+      if (.not. vmixset) then
+        write (stdout,'(/,(1x,a/1x,a/1x,a/1x,a/1x,a/1x,a))')
+     & '==> Error: "bryan_lewis_vertical" tracer diffusion requires   '
+     &,'           "constvmix", "ppvmix", "tcvmix", or "kppvmix".     '
+     &,'           If "constvmix" is enabled, "bryan_lewis_vertical"  '
+     &,'           coefficients replace kappa_h. If "ppvmix","tcvmix",'
+     &,'           or "kppvmix" is enabled, "bryan_lewis_vertical"    '
+     &,'           coefficients are added to the predicted coeffs.    '
+        errorc = .true.
+      endif
+      if (.not.vmixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: No vertical mixing scheme has been enabled  '
+        errorc = .true.
+      endif
+      if (.not.vmixset) then
+        write (stdout,'(/,(1x,a))')
+     & '==> Error: there is no vertical mixing scheme enabled         '
+        errorc = .true.
+      endif
+
+	write (stdout,9000)
+     & '==> Warning: option partial_cell uses the UNESCO equation of '
+     &,'             state for hydrostatic pressure gradients.       '
+c
+c       Options for memory management of diagnostics 
+c
+          write(stdout,9000)
+     & '==> Note: "diagnostics_himem" is enabled.                    '
+     &,'          Diagnostics of 3d fields will be buffered over the '
+     &,'          full model.   This approach requires much memory,  ' 
+     &,'          but is considerably faster than diagnostics_lomem. '
+c
+c       Check for incompatible options
+c        
+c
+c
+        write (stdout,9000)
+     & '==> Warning:  "parallel_1d" is enabled.                        '
+        write (stdout,*) '              Note:', num_processors
+     &, ' processors were requested.'
+c
+c     look for potential load imbalance 
+c
+      ncr = jecomp3(1)-jscomp3(1)+1
+      i   = 0
+      do n=2,num_processors
+        if (ncr .ne. (jecomp3(n)-jscomp3(n)+1)) i = 1
+      enddo
+      if (i .eq. 1) then
+        write (stdout,*)
+     & '==> Warning: There is a potential load imbalance if the number '
+     &,'             of computed rows is not the same on all processors'
+        do n=1,num_processors
+          ncr = jecomp3(n)-jscomp3(n)+1
+          write (stdout,*) 'Processor #',n,' computes ',ncr,' rows'
+        enddo
+      endif
+      if (jmw .ne. 5 .and. jmw .ne. window_size) then
+        write (stdout,9000)
+     & '==> Error: jmw is set wrong for a fourth_order_window'
+     &,'           only the following sizes are allowed:'
+        write (stdout,*)'          jmw=5 or jmw=',window_size
+        write (stdout,*)'          you have set jmw=',jmw
+	write (stdout,*)'          reset jmw to ',window_size
+	write (stdout,*)'          in size.h'
+        errorc = .true.  
+      else
+        write (stdout,9000)
+     & '==> Note: a fourth_order_window is being used.'
+      endif
+c
+      if (nkflds .lt. 2) then
+        write (stdout,9000)
+     & '==> Error: "nkflds" must be at least 2                        '
+        write (stdout,*)'          nkflds is set = ',nkflds
+        errorc = .true.  
+      endif
+c
+        write (stdout,9000)
+     & '==> Warning: The topography is being imported. Are you sure   '
+     &,'             that the "kmt" field matches the vertical grid?  ' 
+     &,'             i.e. Are the grid points within levels given by  '
+     &,'             k = kmt(i,jrow) really defined at depth "zt(k)"? ' 
+c
+      if (damp_factor(1) .eq. c0 .or. damp_factor(2) .eq. c0) then
+        write (stdout,9000)
+     & '==> Error: the damping time scale "dampts" must be set > 0    '
+     &,'           when enabling option "restorst"                    '
+        errorc = .true.
+      endif
+      if (damp_factor(1) .ne. damp_factor(2)) then
+        write (stdout,9000)
+     & '==> Warning: are you aware that the damping time scale "dampts"'
+     &,'           is set differently for T and S in option "restorst"?'
+     &,'           (they can be set the same in the namelist)          '
+      endif
+c
+c
+c
+        write (stdout,9000)
+     & '==> Note: since redi_diffusion was specified for tracers,     '
+     &,'    kappa_h and Ah will be used as background mixing coeffs   '
+c
+c
+      if(eta_mix.le.100) then
+        write (stdout,9000)
+     &  '==> Warning:  Laplacian filtering of eta is on.              '  
+     & ,'              eta_mix = ',eta_mix,' may not be a good choice!'
+     & ,'              Check the output for the free surface part!    '
+     & ,'              Check vertical velocities for checkerboards!   '
+     & ,'              Redefine eta_mix in namelist.mixing.           '
+      endif
+c
+c
+c
+c
+c
+        if ((ah+ahisop) .gt. 1.e11) then
+          write (stdout,9000)
+     & '==> Error: "ahisop"+"ah" is too large for the                 '
+     &,'             "redi_diffusion" mixing option                   '
+          errorc = .true.
+        endif
+c
+        if (dtsf .le. c0) then
+          write (stdout,9000)
+     & '==> Error: need to set the external mode time step "dtsf"     '
+          errorc = .true.
+          dtsf = epsln
+	endif
+c
+        if (dtuv .le. c0) then
+          write (stdout,9000)
+     & '==> Error: need to set the internal mode time step "dtuv"     '
+          errorc = .true.
+          dtuv = epsln
+	endif
+c
+        if (dtts .le. c0) then
+          write (stdout,9000)
+     & '==> Error: need to set the density time step "dtts"           '
+          errorc = .true.
+          dtts = epsln
+	endif
+c
+        critv = 1.e-6
+        if (mod(rundays,dtts*secday) .gt. critv) then
+          t1 = nint(rundays/(dtts*secday))*dtts*secday
+          write (stdout,9000)
+     & '==> Warning: there must be an integral number of density time '
+     &,'    steps within "rundays" (the integration time).            '
+          write (stdout,*) '               (changed "rundays" from '
+     &,   rundays,' days to ', t1,' days to insure this condition)'
+          rundays = t1
+        endif
+c
+c-----------------------------------------------------------------------
+c       time step checks
+c-----------------------------------------------------------------------
+c
+      if (acor .ne. 0) then
+        write (stdout,9000)
+     & '==> Error: "acor" must=0 when option damp_inertial_oscillation'
+     &,'           is not enabled.  '
+          errorc = .true.
+      else
+c
+c       check for marginally resolved inertial oscillation
+c
+        fmax = epsln
+        do jrow=jscomp,jecomp
+	  do i=2,imtm1
+	    if (kmu(i,jrow) .ne. 0) then
+              fmax = max(fmax,abs(c2*omega*sine(jrow)))
+	    endif
+	  enddo
+        enddo
+        call mpp_max(fmax)
+        call mpp_sync()
+        dtuvmax = (1.0/6.0)*(c2*pi)/fmax
+        write (stdout,'(/a,/,11x,a,f8.0,a)')
+     &' ==> Note: 6 timesteps/(min inertial period) implies a maximum'
+     &,'dtuv of ',dtuvmax,' sec.'
+        if (dtuv .gt. dtuvmax) then
+          write (stdout,9000)
+     & '==> Error: the inertial oscillation is not resolved. reduce    '
+     &,'           "dtuv" or use option "damp_inertial_oscillation"    '
+     &,'            or remove stop condition to continue.'
+          errorc = .true.
+        endif
+      endif
+c
+c       CFL time step limit for internal gravity waves
+c
+        cgint = 300.0
+	dtcg  = 1.e10
+	icg   = 1
+	jcg   = jmt/2
+        dxumin = 1.0e20
+	do jrow=jscomp,jecomp
+	  do i=2,imt-1
+	    if (kmu(i,jrow) .ne. 0) then
+	      dxumin = min(dxumin,dyu(jrow),csu(jrow)*dxu(i))
+	      dti = 0.5*dxumin/cgint
+	      if (dti .lt. dtcg) then
+	        dtcg = dti
+	        icg  = i
+	        jcg  = jrow
+	      endif
+	    endif
+	  enddo
+	enddo
+	dtcg = nint(dtcg)
+	write (stdout,*)
+     & '==> Note: based on a maximum internal gravity wavespeed of'
+     &, nint(cgint/100),' m/sec,'
+        write (stdout,*)
+     & '          the CFL restriction implies a maximum dtuv =',dtcg
+     &,' sec'
+        write (stdout,*)
+     &'          at ','(i,jrow) = (',icg,',',jcg,') on the U grid where'
+        write (stdout,*)
+     &'          the minimum grid spacing = ~',nint(dxumin/1.e5),' km.'
+        write (stdout,*)
+     &'          The specified dtuv = ',nint(dtuv),'sec.'
+c
+c       CFL horizontal advective restriction for tracers
+c
+        itmin  = imt/2
+        jtmin  = jmt/2
+        dxtmin = min(dyt(jmt/2),cst(jmt/2)*dxt(imt/2))
+	do jrow=jscomp,jecomp
+	  do i=2,imt-1
+	    if (kmt(i,jrow) .ne. 0) then
+	      dxtmin2 = min(dyt(jrow),cst(jrow)*dxt(i))
+              if(dxtmin2 .lt. dxtmin) then
+                dxtmin = dxtmin2
+                itmin  = i
+                jtmin  = jrow
+              endif
+            endif
+	  enddo
+	enddo
+c
+        dt_adv = dtts
+	c_adv = nint(0.5*dxtmin/dt_adv)
+	write (stdout,*)
+     & '==> Note: based on a minimum T-cell grid length of approx'
+     &, nint(dxtmin/1.e5),' km'
+        write (stdout,*)
+     & '          at the (i,j) grid point (',itmin,',',jtmin
+     &,  ') and a tracer timestep dtts =',nint(dtts),' sec,'
+        write (stdout,*)
+     & '          the CFL restriction implies a maximum horizontal '
+        write (stdout,*)
+     & '          advection velocity of ',nint(c_adv),' cm/sec.'
+        write (stdout,*)
+     & '          advection velocity greater than this is unstable'
+c
+c       CFL vertical advective restriction for tracers
+c
+        dt_adv = dtts
+	dztmin = dzt(1)
+	do k=2,km
+	  if (dztmin .gt. dzt(k)) then dztmin = dzt(k)
+	enddo
+	c_adv = 0.5*dztmin/dt_adv
+	write (stdout,*)
+     & '==> Note: based on a minimum T-cell grid thickness of approx'
+     &, nint(dztmin/1.e2),' m'
+        write (stdout,*)
+     & '          and a tracer timestep dtts =',nint(dtts),' sec,'
+        write (stdout,*)
+     & '          the CFL restriction implies a maximum vertical '
+        write (stdout,'(a,es10.3,a)')
+     & '          advection velocity of ',c_adv,' cm/sec.'
+        write (stdout,*)
+     & '          advection velocity greater than this is unstable'
+	if (dtuv .gt. dtcg) then
+	  write (stdout,9000)
+     &'==> Error: reduce dtuv or remove this stop condition.'
+          errorc = .true.
+        endif
+	if (abs(nint(dtuv/dtsf)*dtsf-dtuv) .gt. critv) then
+	  write (stdout,9000)
+     & '==> Warning: for explicit free surface mod(dtuv,dtsf)=0 must  '
+     &,'             be satisfied. It is not. Original setting: '
+	  write (stdout,*) 'dtuv =  ',dtuv,' sec'
+	  write (stdout,*) 'dtsf =  ',dtsf,' sec'
+	  write (stdout,9000) '             New setting:               '
+          dtsf = dtuv/(int(dtuv/dtsf)+1)
+	  write (stdout,*) 'dtsf =  ',dtsf,' sec'
+	endif
+        if( abs(dtuv/dtsf/2 - nint(dtuv/dtsf/2)) .gt. critv ) then        
+          write(*,9000)
+     & '==> Error: for explicit free surface dtuv/dtsf must be         '
+     & ,'          an even integer to maintain proper centering        '
+     & ,'          of barotropic time on the baroclinic time.          '
+     & ,'          Reset dtsf and/or dtuv to satisfy this constraint.  '
+	  errorc = .true.
+        endif 
+c
+        icg   = 1
+	jcg   = 1
+	cgmax = 1.0
+	dtcgmin = 1.e10
+	gridmin = dxu(2)
+        do jrow=jscomp,jecomp
+	  do i=2,imt-1
+	    if (kmu(i,jrow) .gt. 0) then
+	      depth = zw(kmu(i,jrow))
+	      cgrav = sqrt(grav*depth)
+	      gridsp = min(dyu(jrow), csu(jrow)*dxu(i))
+	      dtcg = 0.5*(gridsp)/cgrav
+	      if (dtcg .lt. dtcgmin) then
+	        gridmin = gridsp
+                dtcgmin = dtcg
+	        cgmax = cgrav
+	        icg   = i
+	        jcg   = jrow
+	      endif
+	    endif
+	  enddo
+	enddo
+	dtcgmin = nint(dtcgmin)
+	cgmax   = nint(cgmax)
+! tp: this code does not work correcly on T90 but does on T3E
+! tp: Balaji should look at this
+!!        sml = dtcgmin
+!!        call mpp_max(sml)
+!!        if( pe.EQ.0 )then
+!!            if( sml.NE.dtcgmin )
+!!     &           call mpp_transmit( icg, 4, NULL_PE, icg, 4, ANY_PE  )
+!!        else
+!!            if( sml.EQ.dtcgmin )
+!!     &           call mpp_transmit( icg, 4,       0, icg, 4, NULL_PE )
+!!        endif
+        call mpp_max(cgmax)
+        call mpp_sync()
+        call mpp_min(dtcgmin)
+        call mpp_sync()
+	write (stdout,9000) '==> Note: for the explicit free surface.'
+        write (stdout,*)
+     & '          The fastest gravity wave speed =  ',cgmax,'cm/sec'
+!!     &,' at i=',icg,' and jrow=',jcg,' on the U grid.'
+        write (stdout,*)
+     & '          where the grid length = ~',nint(gridmin/1.e5),' km.'
+	write (stdout,*)
+     & '          For stability, dtsf must be less than ',dtcgmin,' sec'
+	write (stdout,*)
+     & '          The specified dtuv =  ',dtuv,' sec and dtsf = '
+     &, dtsf,' sec. '
+	write (stdout,*)
+     & '          This implies ',2*nint(dtuv/dtsf),' (due to averaging)'
+     &,' barotropic time steps'
+        write (stdout,*) 
+     & '          per baroclinic time step.'
+	if (dtsf .gt. dtcgmin) then
+	  write (stdout,9000)'==> Error: for explicit free surface.  '
+     &,'          dtsf > time step allowed by fastest wave speed'
+	  errorc = .true.
+	endif
+c
+        if (itmb) then
+          write (stdout,9000)
+     & '==> Warning: "itmb" is set to "true". set it to "false" in    '
+     &,'            subsequent runs to prevent the time independent   '
+     &,'            basin mask from being written more than once. This'
+     &,'            reduces the size of the diagnostic file.          '
+	endif
+c
+        if (itrmb) then
+          write (stdout,9000)
+     & '==> Warning: "itrmb" is set to "true". set it to "false" in   '
+     &,'            subsequent runs to prevent the time independent   '
+     &,'            region masks from being written more than once.   '
+     &,'            This reduces the size of the diagnostic file.     '
+	endif
+c
+        if (itavg) then
+          write (stdout,9000)
+     & '==> Warning: "itavg" is set to "true". set it to "false" in   '
+     &,'            subsequent runs to prevent the time independent   '
+     &,'            region masks from being written more than once.   '
+     &,'            This reduces the size of the diagnostic file.     '
+	endif
+      if (tmbint .gt. c0) then
+        write (stdout,9000)
+     & '==> Warning: the averaging interval "tmbint" is > zero but the'
+     &,'             the "meridional_tracer_budget" option is not on. '
+      endif
+        if (mod(timavgint,dtts*secday).gt.critv .and. timavgint .gt. c0)
+     &    then
+          t1 = nint(timavgint/(dtts*secday))*dtts*secday
+          write (stdout,9000)
+     & '==> Warning: "timavgint" does not contain an integral number of'
+     &,'    density time steps "dtts".                                '
+          write (stdout,*) '               (changed "timavgint" from '
+     &,   timavgint,' days to ', t1,' days to insure this condition)'
+          timavgint = t1
+        endif
+        if (timavgint .eq. c0) then
+          write (stdout,9000)
+     & '==> Warning: averaging interval "timavgint" = 0.0 implies '
+     &,'   no averaging when option "time_averages" is enabled    '
+        endif
+        if (timavgint .gt. timavgper) then
+          write (stdout,9000)
+     & '==> Warning: the interval "timavgint" exceeds the averaging'
+     &,'             period "timavgper" for option "time_averages" '
+        endif
+        if (timavgint .lt. timavgper) then
+          write (stdout,9000)
+     & '==> Warning: averaging period "timavgper" exceeds interval'
+     &,'            "timavgint". Setting timavgper = timavgint    '
+          timavgper = timavgint
+        endif
+        if (timavgper .eq. c0) then
+          write (stdout,9000)
+     & '==> Warning: the averaging period "timavgper" is zero. The '
+     &,'            average will be over only one time step!       '
+        endif
+      if (xbtint .ne. c0) then
+        write (stdout,9000)
+     & '==> Warning: the averaging interval "xbtint"  is > zero but   '
+     &,'             the "save_xbts" option is not enabled            '
+      endif
+      if (dspint .ne. c0) then
+        write (stdout,9000)
+     & '==> Warning: the averaging interval "dspint"  is > zero but'
+     &,'             option "diagnostic_surf_height" is not enabled'
+      endif
+c
+      if ((dtuv .ne. dtsf) .or. (dtuv .ne. dtts)) then
+        write (stdout,9000)
+     & '==> Warning: use of unequal time steps implies the transient  '
+     &,'             response may be inaccurate.                      '
+      endif
+c
+c     check for mixing coefficients larger than stability permits
+c
+      dymin  = dyt(2)
+      dxmin  = dxt(2)
+      dzmin  = dzt(1)
+      xlmax  = dtxcel(1)
+      fzimax = fzisop(1)
+      do jrow=2,jmtm1
+        dymin  = min(dymin,dyt(jrow))
+      enddo
+      do i=2,imtm1
+        dxmin  = min(dxmin,dxt(i))
+      enddo
+      do k=2,km
+        xlmax  = max(xlmax,dtxcel(k))
+        dzmin  = min(dzmin,dzt(k))
+        fzimax = max(fzimax,fzisop(k))
+      enddo
+c
+      if (xlmax .gt. c1) then
+        write (stdout,9000)
+     & '==> Warning: use of accelerated time steps implies the        '
+     &,'             transient response is unimportant and multiple   '
+     &,'             equilibria do not exist. stability tests will    '
+     &,'             use "dtts" multiplied by the maximum "dtxcel"    '
+      endif
+c
+c Check that size of viscosity is not too large
+c
+      write (stdout,9000)
+     & '==> Warning: ifdef "shortwave" is enabled but "coupled"       '
+     &,'             is not. Is the shortwave component of radiation  '
+     &,'             defined ?                                        '
+      write (stdout,9000)
+     & '==> Warning: "implicitvmix" turns convective adjustment off.  '
+     &,'              It will be handled by the vertical mixing       '
+c
+c     check range of implicit factors
+c
+c
+c     verify that the domain boundary is valid
+c
+      in = 0
+      is = 0
+      do i=1,imt
+        if (kmt(i,jstask) .ne. 0 .and. jstask .eq. 1) is = i
+	if (kmt(i,jetask) .ne. 0 .and. jetask .eq. jmt) in = i
+      enddo
+      if (is .ne. 0) then
+        errorc = .true.
+        write (stdout,9000)
+     & '==> Error: The basin is not closed. "kmt" is non zero along   '
+     &,'           the southern boundary.                             '
+        write (stdout,*) '           at j=1 and i=',is
+      endif 
+      if (in .ne. 0) then
+        errorc = .true.
+        write (stdout,9000)
+     & '==> Error: The basin is not closed. "kmt" is non zero along   '
+     &,'           the northern boundary.                             '
+        write (stdout,*) '           at j=jmt and i=',in
+      endif 
+c
+c     verify that each ocean point is at least 2 levels deep
+c
+      numk = 0
+      do jrow=jscomp,jecomp
+        do i=1,imt
+	  if (kmt(i,jrow) .eq. 1) then
+            numk = numk + 1
+	    errorc = .true.
+	    write (stdout,*)
+     &	            ' Error: kmt(',i,',',jrow,') = 1 is not allowed'
+	  endif
+        enddo
+      enddo
+      if (numk .ne. 0) then	
+        write (stdout,9000)
+     & '==> Error: "kmt" must be at least 2 levels deep at all ocean  '
+     &,'           points.                                            '
+      endif
+c
+
+c
+c
+
+        if (ALL(kmt(1:imt,jscomp:jecomp) .eq. 0)) then
+            write( stdout,'(2a,3i6)' )
+     &    '==> Warning: There are no ocean KMT points in'
+     &,   '            this parallel domain. Problem domain pn,js,je='
+     &,           pn, jscomp, jecomp
+        endif
+        if (ALL(kmu(1:imt,jscomp:jecomp) .eq. 0)) then
+            write( stdout,'(2a,3i6)' )
+     &    '==> Warning: There are no ocean KMU points in'
+     &,   '            this parallel domain. Problem domain pn,js,je='
+     &,           pn, jscomp, jecomp
+        endif
+        
+      write (stdout,'(/,20x,a,/)')
+     &         ' E N D    C O N S I S T E N C Y    C H E C K S'
+      call mpp_sync()
+      if (errorc) then
+        write (stdout,'(/a/a)')
+     &  'An error flag has been detected in "checks"'
+     &,' Use "grep -i error " on this printout file to find ALL errors.'
+        call abort()
+      endif
+c
+      return
+9000  format (/,(1x,a))
+      end

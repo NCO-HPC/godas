@@ -1,0 +1,26 @@
+#!/bin/ksh
+#
+
+echo " "
+echo "Checking own .../com/godas/prod"
+echo " "
+
+cd /ptmpp1/David.Behringer/com/godas/prod
+ls
+
+utilscript=/nwprod/util/ush
+useCntrFile=no
+export cycle=t06z
+$utilscript/setpdy.sh > scrtch
+. PDY
+
+echo " "
+if [ ! -s godas.${PDYm1} ]; then
+  echo "Did not find godas.${PDYm1} etc."
+  echo "NOT OK to run."
+else
+  echo "Found godas.${PDYm1} etc."
+  echo "OK to run: runLsf.ksh"
+fi
+echo " "
+

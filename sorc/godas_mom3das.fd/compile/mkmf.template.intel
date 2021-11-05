@@ -1,0 +1,17 @@
+# Template for INTEL
+#
+FC = ftn
+LD = ftn
+CC = cc
+#FC = mpiifort
+#LD = mpiifort
+#CC = mpiicc
+FFLAGS= -real-size 64 -integer-size 32 -O3 -convert big_endian -align dcommons -traceback -warn noalign $(INCL)
+F0FLAGS= -real-size 64 -integer-size 32 -O0 -convert big_endian -traceback -warn noalign $(INCL)
+CFLAGS = 
+LDFLAGS = $(LIBS)
+#LIBS = /usrx/local/prod/packages/ips/18.0.1/netcdf/3.6.3/lib/libnetcdf.a
+#INCL = -I/usrx/local/prod/packages/ips/18.0.1/netcdf/3.6.3/include
+LIBS = -L${NETCDF_LIB} -lnetcdf
+INCL = -I${NETCDF_INC}
+

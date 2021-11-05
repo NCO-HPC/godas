@@ -1,0 +1,4 @@
+        &ictime eqyear=.false., eqmon=.false., refinit=.false.,
+                refrun=.true., year0=1900, month0=1, day0=1, hour0=0,
+                min0=0, sec0=0,
+        /

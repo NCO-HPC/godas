@@ -1,0 +1,6 @@
+        &mixing am=2.e7, ah=2.e6, ambi=1.e22, ahbi=1.e21,
+              kappa_m=25.0, kappa_h=1.0, aidif=1.0,
+              nmix=17, eb=.true.,  ncon=1, cdbot=1.2e-3,
+              acor=0.0, dampts(1)=5.,dampts(2) = 10.,smooth=0.05,
+                filter_reflat_s=-81.0,filter_reflat_n=79.0,
+        /

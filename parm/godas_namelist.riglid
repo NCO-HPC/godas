@@ -1,0 +1,3 @@
+        &riglid mxscan=700, tolrsf=1.0e6, tolrsp=1.0e-4,
+              tolrfs=1.0e-4,
+        /

@@ -1,0 +1,40 @@
+##################################################################S
+# This parameter file set up the environment variables used in
+# the J-Job scripts to run cfsv1
+##################################################################
+if [ $RUN_ENVIR = dev -o $RUN_ENVIR = devpara ]
+then
+  export HOMEgodas=${HOMEgodas:-/climate/save/climpara/RFC/cfsv1.0/nwprod}
+  export EXECgodas=${EXECgodas:-$HOMEgodas/exec}
+  export PARMgodas=${PARMgodas:-$HOMEgodas/parm}
+  export USHgodas=${USHgodas:-$HOMEgodas/ush}
+  export FIXgodas=${FIXgodas:-$HOMEgodas/fix}
+
+  userid=$LOGNAME
+  group_name=${group_name:-climate}      # Change to "global" if you belong to the global group
+
+  export COM_IN=${COM_IN:-/${group_name}/noscrub/$userid/com/godas/${envir}}
+  export COM_OUT=${COM_OUT:-/${group_name}/noscrub/$userid/com/godas/${envir}}
+  export COM=${COM:-/${group_name}/noscrub/$userid/com/godas/${envir}}
+   
+  export COMDIR=${COMDIR:-$COM_IN}
+
+  export gespath=${gespath:-/${group_name}/noscrub/$userid/nwges/${envir}}
+  
+  export DATA_IN=${DATA_IN:-/ptmp/$LOGNAME/tmpnwprd}
+  export jlogfile=$DATA_IN/jlogfile
+
+  export HPSSROT=/hpsspara/runhistory
+  export SENDCOM=${SENDCOM:-YES}
+  export SENDSMS=${SENDSMS:-YES}
+  export SENDDBN=${SENDDBN:-NO}
+  export DEV_SMS=${DEV_SMS:-YES}
+
+  ## For parallel testing only
+  RETRO_MODE=${RETRO_MODE:-NO}
+  if [ $RETRO_MODE = YES ]; then
+    retro_cdate=`cat $COM_IN/../retro_cdate`
+    newdate=`/nwprod/util/exec/ndate +6 $retro_cdate`
+    export PDY=`echo $newdate |cut -c1-8`
+  fi
+fi

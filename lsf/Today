@@ -1,0 +1,19 @@
+#!/bin/ksh
+
+if [ $# -ge 1 ]; then
+  hr=$1
+else
+  hr=00
+fi
+
+ utilscript=/nwprod/util/ush
+
+
+  useCntrFile=no
+
+# export cycle=t06z
+  export cycle=t${hr}z
+  $utilscript/setpdy.sh > scrtch
+  . PDY
+  echo $PDY
+

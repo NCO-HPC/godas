@@ -1,0 +1,4 @@
+        &contrl init=.false., initpt=.false.,
+              runlen=1, rununits='days',
+              restrt=.true.,segtim=1.0,
+        /

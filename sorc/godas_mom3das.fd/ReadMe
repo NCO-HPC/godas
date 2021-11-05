@@ -1,0 +1,9 @@
+Shallow Water version of GODAS.
+Assimilation is done to ~750m (k=30).
+This limit is set in .../godas3/GODAS3/src/godas3/assim_mod.F90
+ by "kass=30".
+
+Running cmp_iGM3d.sh in the "compile" sub-directory will compile the godas
+code and move the executable to the "exec" diectory.
+
+

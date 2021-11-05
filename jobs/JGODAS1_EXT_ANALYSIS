@@ -1,0 +1,137 @@
+#!/bin/sh
+set -xa
+
+#export MP_IOAGENT_CNT=all
+#export MP_IO_BUFFER_SIZE=8M
+export RUN_ENVIR=${RUN_ENVIR:-prod}
+
+###############################################################
+# This block can be modified for different test environment
+###############################################################
+if [ $RUN_ENVIR = prod -a $envir != prod ]; then
+  export SENDDBN=${SENDDBN:-NO}
+# export jlogfile=${jlogfile:-${DATA}/jlogfile.`date +%Y%m%d`}
+fi
+
+#####################################
+# SET SHELL PROCESSING VARIABLES
+# ###################################
+export PS4='$SECONDS + '
+date
+################################################
+# SETUP GODAS DUMP PROCESSING VARIABLES
+# ##############################################
+
+##########################################################
+# obtain unique process id (pid) and make temp directory
+##########################################################
+export pid=$$
+export DATA=${DATA:-${DATAROOT}/$job.$pid}
+mkdir -p $DATA
+cd $DATA
+
+export cycle=t${cyc}z
+
+####################################
+# Specify NET Name and RUN
+####################################
+export NET=${NET:-godas}
+export RUN=${RUN:-godas_ext}
+
+####################################
+# Determine Job Output Name on System
+####################################
+export outid="LL$job"
+export jobid="${outid}.o${pid}"
+export pgmout="OUTPUT.${pid}"
+
+####################################
+# File To Log Msgs
+####################################
+#export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
+
+####################################
+# SENDECF  - Flag Events on ecFlow
+# SENDDBN  - Issue DBNet Client Calls
+# SENDCOM  - Copy files to /com directory
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDDBN=${SENDDBN:-YES}
+export SENDCOM=${SENDCOM:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEgodas=${HOMEgodas:-${PACKAGEROOT:?}/godas.${godas_ver:?}}
+export EXECgodas=${EXECgodas:-$HOMEgodas/exec}
+export FIXgodas=${FIXgodas:-$HOMEgodas/fix}
+export PARMgodas=${PARMgodas:-$HOMEgodas/parm}
+export USHgodas=${USHgodas:-$HOMEgodas/ush}
+
+#############################
+# Set up the UTILITIES
+##############################
+export EXECwgrib=${EXECwgrib:-$WGRIB}
+export EXECcopygb=${EXECcopygb:-$COPYGB}
+
+##############################
+# Define the GODAS executable
+##############################
+
+export EXECmom3das=${EXECmom3das:-$EXECgodas/godas_mom3das}
+
+#####################################################
+# Define variables used for the Shallow Assimilation
+#####################################################
+
+export ndysbc=14
+export lag=2
+export runlen=1
+export numruns=13
+
+##############################
+# Run setup to initialize working directory and utility scripts
+##############################
+#setup.sh
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+
+setpdy.sh
+. ./PDY
+
+##############################################
+# Define COM directories
+##############################################
+export COMDIR=${COMDIR:-$(compath.py -o $NET/${godas_ver})}
+export COMBASE=${COMBASE:-${COMROOT}/${NET}/${envir}/godas}
+export COMIN_IC=$COMBASE.${PDY}
+export COMIN=${COMIN:-$(compath.py -o $NET/${godas_ver})/godas.${PDY}}
+export COMOUT=${COMOUT:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
+#export COMIN=$COMDIR/godas.${PDY}
+#export COMOUT=$COMDIR/${RUN}.${PDY}
+
+mkdir -m 775 -p $COMOUT
+
+env
+
+#############################################################
+# execute the script
+
+$HOMEgodas/scripts/exgodas1_anl.sh
+
+echo "`hostname`  --  `date`" > $COMOUT/where_${cycle}_${RUN}_anl_ran
+
+###################################################
+# msg end of job and clean up temperary directory
+###################################################
+cat $pgmout
+msg="ENDED NORMALLY."
+postmsg "$msg"
+
+date
+
+cd ${DATA}/..
+if [ ${KEEPDATA}:-YES} = NO ] ; then rm -rf $DATA ; fi
+

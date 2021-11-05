@@ -1,0 +1,104 @@
+#! /bin/sh
+#PBS -N godas2_dump
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -q dev
+#PBS -A GODAS-DEV
+#PBS -l walltime=00:30:00
+#PBS -l select=1:ncpus=4:mem=200mb
+#PBS -o godas2.dump.out
+#PBS -l debug=true
+
+set -x
+export HOMEgodas=/lfs/h2/emc/da/noscrub/$USER/GODAS/godas.v1.1.0
+. ${HOMEgodas}/versions/run.ver
+
+module purge
+module load gcc/${gcc_ver}
+module load libjpeg/${libjpeg_ver}
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load cray-pals/${cray_pals_ver}
+module load w3emc/${w3emc_ver}
+module load prod_envir/${prod_envir_ver}
+module load prod_util/${prod_util_ver}
+module load w3nco/${w3nco_ver}
+module load bufr/${bufr_ver}
+module load bacio/${bacio_ver}
+module load netcdf/${netcdf_ver}
+module load bufr_dump/${bufr_dump_ver}
+module load grib_util/${grib_util_ver}
+module list
+
+alias ecflow_client='No ecflow '
+export envir=prod
+export NET=godas
+export cyc=00
+export job=godas2_dump
+export dsk=gd2
+export LOUD=off
+
+export cycle=t${cyc}z
+export WPTMP=/lfs/h2/emc/ptmp
+export DATA=${WPTMP}/${USER}/${job}.$$
+#export jlogfile=${DATA}/jlogfile.`date +%Y%m%d`
+export COMDIR=${WPTMP}/$USER/com/${NET}/$envir
+
+export COMPATH_ROOT=/lfs/h1/ops/canned/com
+export TANK_ROOT=/lfs/h1/ops/canned/dcom/
+export COMROOT=/lfs/h2/emc/da/noscrub/$USER/${envir}/com
+
+export COMPATH=${COMPATH_ROOT}/gfs
+export COMINsst=${COMINsst:-`compath.py ${envir}/com/gfs/${gfs_ver}/sst`}
+export COMPATH=${COMPATH_ROOT}/cdas2
+export COMINflux=${COMINflux:-`compath.py ${envir}/com/cdas2/${cdas2_ver}/cdas2`}
+
+#export COMIN=${COMIN:-$(compath.py $envir/com/$NET/${spc_post_ver})/$RUN.${PDY}}
+#export COMOUT=${COMOUT:-$(compath.py -o $NET/${spc_post_ver})/$RUN.${PDY}}
+
+export EXECgodas=${HOMEgodas}/exec
+export FIXgodas=${HOMEgodas}/fix
+export PARMgodas=${HOMEgodas}/parm
+export USHgodas=${HOMEgodas}/ush
+export UTILP=${UTILROOT}
+export UGRIB=${grib_util_ROOT}
+export UDUMP=${HOMEbufr_dump}
+
+export utilscript=${UTILROOT}/ush
+export utilparm=${UTILP}/nwprod/util/parm
+export utilexec=${grib_util_ROOT}/exec
+
+export EXECoverdategrb=${HOMEgodas}/ush/overdate.grib
+export EXECcopygb=${grib_util_ROOT}/bin/copygb
+export EXECwgrib=${grib_util_ROOT}/bin/wgrib
+export EXECcombfr=${HOMEbufr_dump}/exec/bufr_combfr
+
+export HOMEbufr=${HOMEbufr_dump}
+export USHbufr=${HOMEbufr}/ush
+export ARGODUMP=${HOMEgodas}/exec/bufr_argodump
+export DUMP=${HOMEgodas}/ush/bufr_dumparte
+
+export TANK=${TANK_ROOT}
+export TANKbdir=b001
+export TANKbouy=xx103
+
+export LIST=${HOMEbufr_dump}/fix/bufr_dumplist
+export BTAB=${HOMEbufr_dump}/fix/bufrtab.mods
+export HOMEobsproc_mods=${HOMEgodas}
+export DUMPMB=${USHgodas}/dumpmb
+export DUMPJB=${HOMEbufr_dump}/ush/dumpjb
+export DUMPOPS=$DUMPJB
+
+export SENDECF=NO
+export KEEPDATA=YES
+
+
+. ${HOMEgodas}/lsf/mdPDY
+
+$HOMEgodas/jobs/JGODAS2_DUMP
+
+#---->++++++++++++++++++++++++++++++
+

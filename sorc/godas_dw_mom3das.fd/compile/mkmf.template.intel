@@ -1,0 +1,15 @@
+# Template for INTEL
+#
+FC = ftn
+LD = ftn
+CC = cc
+
+FFLAGS= -real-size 64 -integer-size 32 -O2 -convert big_endian -align dcommons -traceback -warn noalign $(INCL)
+F0FLAGS= -real-size 64 -integer-size 32 -O0 -convert big_endian -traceback -warn noalign $(INCL)
+
+CFLAGS = 
+LDFLAGS = $(LIBS)
+
+LIBS = -L${NETCDF_LIB} -lnetcdf
+INCL = -I${NETCDF_INC}
+

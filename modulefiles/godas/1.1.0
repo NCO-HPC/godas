@@ -1,0 +1,29 @@
+#%Module######################
+###############################
+#############################################################
+##                                 hyun-chul.lee@noaa.gov
+##                                 EMC/NCEP
+##                                 EMC/NCEP
+##  godas.v1.1.0
+#############################################################
+proc ModulesHelp { } {
+  puts stderr "Set environment variables for compiling godas"
+  puts stderr "This module initializes the users "
+  puts stderr " environment to compile on WCOSS2 machine at NCEP"
+}
+
+module-whatis "godas module for compiling"
+set ver v1.1.0
+
+module load envvar/$env(envvar_ver)
+module load PrgEnv-intel/$env(PrgEnv_intel_ver)
+module load craype/$env(craype_ver)
+module load intel/$env(intel_ver)
+module load cray-mpich/$env(cray_mpich_ver)
+module load w3emc/$env(w3emc_ver)
+module load prod_envir/$env(prod_envir_ver)
+module load w3nco/$env(w3nco_ver)
+module load bufr/$env(bufr_ver)
+module load bacio/$env(bacio_ver)
+module load netcdf/$env(netcdf_ver)
+

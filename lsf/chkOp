@@ -1,0 +1,6 @@
+#!/bin/ksh
+#
+
+#ssh David.Behringer@tide "cd /climate/save/David.Behringer/M3code/WCOSS_godas/lsf; chkProd.ksh"
+# Gyre
+cd /climate/save/Hyun-Chul.Lee/M3code/WCOSS_godas/lsf; chkProd.ksh

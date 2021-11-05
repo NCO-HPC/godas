@@ -1,0 +1,6 @@
+        &kppmix
+         lri=.true., ldd=.false.,
+         visc_con_limit=1000., diff_con_limit=1000.,
+         visc_cbu_limit=50.0, diff_cbt_limit=50.0,
+         visc_cbu_iw=0.0134, diff_cbt_iw=0.00134,
+        /

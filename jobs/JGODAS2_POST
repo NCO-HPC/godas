@@ -1,0 +1,120 @@
+#!/bin/sh
+set -xa
+
+export RUN_ENVIR=${RUN_ENVIR:-prod}
+
+###############################################################
+# This block can be modified for different test environment
+###############################################################
+if [ $RUN_ENVIR = prod -a $envir != prod ]; then
+  export SENDDBN=${SENDDBN:-NO}
+# export jlogfile=${jlogfile:-{DATA}/jlogfile.`date +%Y%m%d`}
+fi
+
+#####################################
+# SET SHELL PROCESSING VARIABLES
+# ###################################
+export PS4='$SECONDS + '
+date
+################################################
+# SETUP GODAS POST PROCESSING VARIABLES
+# ##############################################
+
+##########################################################
+# obtain unique process id (pid) and make temp directory
+##########################################################
+export pid=$$
+export DATA=${DATA:-${DATAROOT}/$job.$pid}
+mkdir -p $DATA
+cd $DATA
+
+export cycle=t${cyc}z
+
+####################################
+# Specify NET Name and RUN
+####################################
+export NET=${NET:-godas}
+export RUN=${RUN:-godas2}
+
+####################################
+# Determine Job Output Name on System
+####################################
+export outid="LL$job"
+export jobid="${outid}.o${pid}"
+export pgmout="OUTPUT.${pid}"
+
+####################################
+# File To Log Msgs
+####################################
+#export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
+
+####################################
+# SENDSMS  - Flag Events on SMS
+# SENDDBN  - Issue DBNet Client Calls
+# SENDCOM  - Copy files to /com directory
+####################################
+export SENDSMS=${SENDSMS:-YES}
+export SENDDBN=${SENDDBN:-YES}
+export SENDCOM=${SENDCOM:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEgodas=${HOMEgodas:-${PACKAGEROOT:?}/godas.${godas_ver:?}}
+export EXECgodas=${EXECgodas:-$HOMEgodas/exec}
+export FIXgodas=${FIXgodas:-$HOMEgodas/fix}
+export PARMgodas=${PARMgodas:-$HOMEgodas/parm}
+export USHgodas=${USHgodas:-$HOMEgodas/ush}
+
+#############################
+# Set up the UTILITIES
+##############################
+export utilscript=${utilscript:-${UTILROOT}/ush}
+export EXECwgrib=${EXECwgrib:-$WGRIB}
+export EXECcopygb=${EXECcopygb:-$COPYGB}
+
+##############################
+# Run setup to initialize working directory and utility scripts
+##############################
+#setup.sh
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+
+setpdy.sh
+. ./PDY
+
+##############################################
+# Define COM directories
+##############################################
+export COMDIR=${COMDIR:-$(compath.py -o $NET/${godas_ver})}
+export COMBASE=${COMBASE:-${COMROOT}/${NET}/${envir}/godas2}
+export COMIN=${COMIN:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
+export COMOUT=${COMOUT:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
+
+mkdir -m 775 -p $COMOUT
+
+#export LOUD=off
+
+env
+
+#############################################################
+# execute the script
+
+$HOMEgodas/scripts/exgodas2_post.sh
+
+echo "`hostname`  --  `date`" > $COMOUT/where_${cycle}_${RUN}_post_ran
+
+###################################################
+# msg end of job and clean up temperary directory
+###################################################
+cat $pgmout
+msg="ENDED NORMALLY."
+postmsg "$msg"
+
+date
+
+cd ${DATA}/..
+if [ ${KEEPDATA}:-YES} = NO ] ; then rm -rf $DATA ; fi
+

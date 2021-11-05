@@ -1,0 +1,16 @@
+        &diagn  tsiint=2.0,
+              timavgint=1,
+              timavgper=1,
+              trajint=1,
+              xbtint=2.0, xbtper=2.0
+              tavgint=1, itavg=.false.,
+              tmbint=1, itmb=.false.,
+              trmbint=2.0, itrmb=.false.,
+              cmixint=1,
+              snapint=1,
+              glenint=1.0, vmsfint=1, stabint=1, zmbcint=1,
+              gyreint=1, extint=1, prxzint=1, dspint=1,
+              dspper=1,
+                crossint=1, pressint=1,
+                fctint=1, tyzint=1, rhoint=1,
+        /

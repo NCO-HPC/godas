@@ -1,0 +1,9 @@
+bsub < jgodas_dump.lsf
+bsub < jgodas_prep.lsf
+bsub < jgodas_analysis.lsf
+bsub < jgodas_ext_analysis.lsf
+
+bsub < jgodas2_dump.lsf
+bsub < jgodas2_prep.lsf
+bsub < jgodas2_analysis.lsf
+bsub < jgodas2_post.lsf
