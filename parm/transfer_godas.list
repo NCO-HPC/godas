@@ -23,15 +23,15 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/godas/_ENVIR_/godas._PDY_/
+_COMROOT_/godas/_SHORTVER_/godas._PDY_/
 B 430
 Z
 
-com/godas/_ENVIR_/godas2._PDY_/
+_COMROOT_/godas/_SHORTVER_/godas2._PDY_/
 B 692
 Z
 
-com/godas/_ENVIR_/godas_ext._PDY_/
+_COMROOT_/godas/_SHORTVER_/godas_ext._PDY_/
 B 572
 Z
 

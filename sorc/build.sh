@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-module purge
-. ../versions/build.ver
-module use -a ../modulefiles
-module load godas/1.1.0
+source ../versions/build.ver
+module reset
+module use `pwd`
+module load build_godas.lua
 module list
 
 base=`pwd`

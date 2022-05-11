@@ -8,7 +8,6 @@ export RUN_ENVIR=${RUN_ENVIR:-prod}
 ###############################################################
 if [ $RUN_ENVIR = prod -a $envir != prod ]; then
   export SENDDBN=${SENDDBN:-NO}
-# export jlogfile=${jlogfile:-${DATA}/jlogfile.`date +%Y%m%d`}
 fi
 
 #####################################
@@ -46,7 +45,7 @@ export pgmout="OUTPUT.${pid}"
 ####################################
 # File To Log Msgs
 ####################################
-#export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
+export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
 
 ####################################
 # SENDECF  - Flag Events on ecFlow
@@ -66,7 +65,7 @@ export EXECgodas=${EXECgodas:-$HOMEgodas/exec}
 export FIXgodas=${FIXgodas:-$HOMEgodas/fix}
 export PARMgodas=${PARMgodas:-$HOMEgodas/parm}
 export USHgodas=${USHgodas:-$HOMEgodas/ush}
-
+export EXECoverdategrb=${HOMEgodas}/ush/overdate.grib
 #############################
 # Set up the UTILITIES
 ##############################
@@ -77,19 +76,24 @@ export EXECcopygb=${EXECcopygb:-$COPYGB}
 # EXECbufr is used to find bufr_combfr called in ex-script.
 #   (See dumpjb and dumpmb scripts for configurable variables 
 #    available to point to executables called by those scripts).
-export HOMEbufr=${HOMEbufr:-${HOMEobsproc_dump}}
+export HOMEbufr=${HOMEbufr:-${HOMEbufr_dump}}
 export USHbufr=${USHbufr:-$HOMEbufr/ush}
 export EXECbufr=${EXECbufr:-$HOMEbufr/exec}
-export LIST=${LIST:-${HOMEobsproc_shared_bufr_dumplist}/fix/bufr_dumplist}
-export BTAB=${BTAB:-${HOMEobsproc_mods}/fix/bufrtab.mods}
+export LIST=${LIST:-${HOMEbufr}/fix/bufr_dumplist}
+#export BTAB=${BTAB:-${HOMEbufr}/fix/bufrtab.mods}
 
-export DUMPMB=$DUMPMB
-export DUMPJB=$DUMPJB
-export DUMPOPS=$DUMPJB
+#export DUMPMB=${USHgodas}/dumpmb
+#export DUMPJB=${HOMEbufr}/ush/dumpjb
+#export DUMPOPS=$DUMPJB
+#export DUMPJB=$DUMPJB
+#export DUMPOPS=$DUMPJB
 
-export ARGODUMP=${HOMEgodas}/exec/bufr_argodump
-export DUMP=${HOMEgodas}/ush/bufr_dumparte
-export TANK=${TANK:-$DCOMROOT/prod}
+#export ARGODUMP=${HOMEgodas}/exec/bufr_argodump
+#export DUMP=${HOMEgodas}/ush/bufr_dumparte
+export TANK=${TANK:-$DCOMROOT}
+export TANKbdir=b001
+export TANKbouy=xx103
+
 ##############################
 # Run setup to initialize working directory and utility scripts
 ##############################
@@ -105,11 +109,11 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COMDIR=${COMDIR:-$(compath.py -o $NET/${godas_ver})}
-export COMIN=${COMIN:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
-export COMOUT=${COMOUT:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
-export COMINsst=${COMINsst:-`compath.py ${envir}/com/gfs/${gfs_ver}/sst`}
-export COMINflux=${COMINflux:-`compath.py ${envir}/com/cdas2/${cdas2_ver}/cdas2`}
+export COMDIR=${COMDIR:-$(compath.py ${envir}/${NET}/${godas_ver})}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${godas_ver})/${RUN}.${PDY}}
+export COMOUT=${COMOUT:-$(compath.py -o ${NET}/${godas_ver})/${RUN}.${PDY}}
+export COMINsst=${COMINsst:-$(compath.py nsst/${nsst_ver})/nsst}
+export COMINflux=${COMINflux:-$(compath.py cdas2/${cdas2_ver})/cdas2}
 
 mkdir -m 775 -p $COMOUT
 
@@ -132,5 +136,5 @@ postmsg "$msg"
 date
 
 cd ${DATA}/..
-if [ ${KEEPDATA}:-YES} = NO ] ; then rm -rf $DATA ; fi
+if [ "${KEEPDATA}:-YES}" = "NO" ] ; then rm -rf $DATA ; fi
 

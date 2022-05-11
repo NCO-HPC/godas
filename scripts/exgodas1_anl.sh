@@ -240,7 +240,9 @@ set -x
 
 #  export NPES=32
 
-  mpiexec -n 32 -ppn 32 $EXECmom3das >> $pgmout 2> errfile
+# mpiexec -n 32 -ppn 32 $EXECmom3das >> $pgmout 2> errfile
+# mpiexec -n 10 -ppn 10 $EXECmom3das >> $pgmout 2> errfile
+  mpiexec -n $ncpus -ppn $ncpus $EXECmom3das >> $pgmout 2> errfile
   export err=$?;err_chk
 
   CDATE_p1=`sh finddate.sh $CDATE d+1`
@@ -287,6 +289,15 @@ then
   [ -s restart.$dteSfx7.dta ] && cp restart.$dteSfx7.dta $COMOUT
 fi
 
+if test "$SENDDBN" = 'YES'
+then
+  if [ -s "$tm_comb" ]; then
+    $DBNROOT/bin/dbn_alert MODEL GODAS_NC $job $COMOUT/$tm_comb
+  fi
+  if [ -s "$tm_comb7" ]; then
+    $DBNROOT/bin/dbn_alert MODEL GODAS_NC $job $COMOUT/$tm_comb7
+  fi
+fi
 
 #####################################################################
 # GOOD RUN

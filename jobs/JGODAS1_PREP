@@ -8,7 +8,6 @@ export RUN_ENVIR=${RUN_ENVIR:-prod}
 ###############################################################
 if [ $RUN_ENVIR = prod -a $envir != prod ]; then
   export SENDDBN=${SENDDBN:-NO}
-# export jlogfile=${jlogfile:-${DATA}/$job.$$/jlogfile.`date +%Y%m%d`}
 fi
 
 #####################################
@@ -34,7 +33,6 @@ export cycle=t${cyc}z
 # Specify NET Name and RUN
 ####################################
 export NET=${NET:-godas}
-#export RUN=${NET:-godas}
 export RUN=${RUN:-godas}
 
 ####################################
@@ -47,7 +45,7 @@ export pgmout="OUTPUT.${pid}"
 ####################################
 # File To Log Msgs
 ####################################
-#export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
+export jlogfile=${jlogfile:-${DATA}/jlogfile.${job}.$$}
 
 ####################################
 # SENDECF  - Flag Events on ecFlow
@@ -93,15 +91,14 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COMDIR=${COMDIR:-$(compath.py -o $NET/${godas_ver})}
-export COMBASE=${COMBASE:-${COMROOT}/${NET}/${envir}/godas}
-export COMIN=${COMIN:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
-export COMOUT=${COMOUT:-$(compath.py -o $NET/${godas_ver})/${RUN}.${PDY}}
+export COMDIR=${COMDIR:-$(compath.py ${envir}/${NET}/${godas_ver})}
+export COMBASE=${COMBASE:-$(compath.py ${envir}/${NET}/${godas_ver})/${RUN}}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${godas_ver})/${RUN}.${PDY}}
+export COMOUT=${COMOUT:-$(compath.py -o ${NET}/${godas_ver})/${RUN}.${PDY}}
 
 mkdir -m 775 -p $COMOUT
 
 env
-
 
 #############################################################
 # execute the script
@@ -120,5 +117,5 @@ postmsg "$msg"
 date
 
 cd ${DATA}/..
-if [ ${KEEPDATA}:-YES} = NO ] ; then rm -rf $DATA ; fi
+if [ "${KEEPDATA}:-YES}" = "NO" ] ; then rm -rf $DATA ; fi
 

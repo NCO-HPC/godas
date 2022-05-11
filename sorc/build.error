@@ -1,0 +1,884 @@
+Resetting modules to system default. Reseting $MODULEPATH back to system default. All extra directories will be removed from $MODULEPATH.
+
+Currently Loaded Modules:
+  1) craype-x86-rome     (H)   4) envvar/1.0           7) intel/19.1.3.304  10) nemsio/2.5.2  13) bufr/11.4.0   16) build_godas
+  2) libfabric/1.11.0.0. (H)   5) PrgEnv-intel/8.1.0   8) cray-mpich/8.1.7  11) w3emc/2.7.3   14) bacio/2.4.1
+  3) craype-network-ofi  (H)   6) craype/2.7.8         9) sigio/2.3.2       12) w3nco/2.4.1   15) netcdf/3.6.3
+
+  Where:
+   H:  Hidden Module
+
+ 
+
+sSort.c(8): warning #266: function "sprintf" declared implicitly
+    sprintf(cmd, "/bin/sort -o %s %s",slist,slist);
+    ^
+
+sSort.c(8): warning #266: function "sprintf" declared implicitly
+    sprintf(cmd, "/bin/sort -o %s %s",slist,slist);
+    ^
+
+sSort.c(8): warning #266: function "sprintf" declared implicitly
+    sprintf(cmd, "/bin/sort -o %s %s",slist,slist);
+    ^
+
+
+Currently Loaded Modules:
+  1) craype-x86-rome     (H)   5) build_godas          9) bufr/11.4.0       13) bacio/2.4.1
+  2) libfabric/1.11.0.0. (H)   6) PrgEnv-intel/8.1.0  10) netcdf/3.6.3      14) w3nco/2.4.1
+  3) craype-network-ofi  (H)   7) craype/2.7.8        11) cray-mpich/8.1.7  15) nemsio/2.5.2
+  4) envvar/1.0                8) intel/19.1.3.304    12) sigio/2.3.2       16) w3emc/2.7.3
+
+  Where:
+   H:  Hidden Module
+
+ 
+
+............................................................................................................................/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1665): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_int8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+--------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1645): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_int8( put_data, put_len, put_pe, get_data, get_len, get_pe )
+-------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1625): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_cmplx8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+----------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1605): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_cmplx8( put_data, put_len, put_pe, get_data, get_len, get_pe )
+---------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1585): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_real8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+---------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(736): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_cmplx8_scalar( get_data, get_len, get_pe )
+---------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(706): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_cmplx8( get_data, get_len, get_pe )
+--------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(676): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_int8_scalar( get_data, get_len, get_pe )
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(646): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_int8( get_data, get_len, get_pe )
+------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(616): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_real8_scalar( get_data, get_len, get_pe )
+--------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp_domains.F90(1465): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GLOBAL_FIELD]
+    subroutine mpp_get_global2D_i8_3d( domain, local_field, global_field )
+------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/mpp_io.F90(1551): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [IOSPEC]
+    subroutine mpp_get_iospec( unit, iospec )
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(24): remark #7713: This statement function has not been used.   [DRHODT]
+       drhodt (tq, sq, k) = c(k,1) + (c(k,4) + c(k,7)*sq)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(27): remark #7713: This statement function has not been used.   [DRHODS]
+       drhods (tq, sq, k) = (c(k,4) + 2.0*c(k,7)*sq + c(k,8)*tq)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(208): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9107  format(' dtts(sec)       = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(206): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9106  format(' abihrm(cm4/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(204): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9105  format(' ahsteep(cm2/sec) = ',e12.6
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(202): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9104  format(' athkdf(cm2/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(200): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9103  format(' ahisop(cm2/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(198): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9102  format(' ah(cm2/sec)     = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(345): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+      write (stdout,'(5(1x,e12.6))') (dtxsqr(k),k=1,km)
+----------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(375): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+      write (stdout,'(5(1x,e12.6))') (fzisop(k),k=1,km)
+----------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(20): remark #7713: This statement function has not been used.   [DENS]
+      dens (tq, sq, k) = (c(k,1) + (c(k,4) + c(k,7)*sq)*sq +
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(12): remark #7713: This statement function has not been used.   [DHUE]
+      dhue(i,k,j)   = min(dhu(i+1,k,j),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(13): remark #7713: This statement function has not been used.   [DHUN]
+      dhun(i,k,j)   = min(dhu(i,k,j+1),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(123): remark #7713: This statement function has not been used.   [CORIOLIS]
+      CORIOLIS(i,k,j,n) = cori(jrow,n)*( 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(12): remark #7713: This statement function has not been used.   [DHUE]
+      dhue(i,k,j)   = min(dhu(i+1,k,j),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(13): remark #7713: This statement function has not been used.   [DHUN]
+      dhun(i,k,j)   = min(dhu(i,k,j+1),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(40): remark #7713: This statement function has not been used.   [ADV_UX]
+      ADV_Ux(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(41): remark #7713: This statement function has not been used.   [ADV_UY]
+      ADV_Uy(i,k,j) = (adv_fn(i,k,j) - adv_fn(i,k,j-1))*dy_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(42): remark #7713: This statement function has not been used.   [ADV_UZ]
+      ADV_Uz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(43): remark #7713: This statement function has not been used.   [ADV_METRIC]
+      ADV_metric(i,k,j,n)=advmet(jrow,n)*u(i,k,j,1,tau)*u(i,k,j,3-n,tau)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(50): remark #7713: This statement function has not been used.   [DIFF_UX]
+      DIFF_Ux(i,k,j) = (diff_fe(i,k,j) - diff_fe(i-1,k,j))*dx_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(51): remark #7713: This statement function has not been used.   [DIFF_UY]
+      DIFF_Uy(i,k,j) = (diff_fn(i,k,j) - diff_fn(i,k,j-1))*dy_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(52): remark #7713: This statement function has not been used.   [DIFF_UZ]
+      DIFF_Uz(i,k,j) = (diff_fb(i,k-1,j) - diff_fb(i,k,j))*dz_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(58): remark #7713: This statement function has not been used.   [DIFF_METRIC]
+       DIFF_metric(i,k,j,n) = (am3(jrow)*u(i,k,j,n,taum1)
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(123): remark #7713: This statement function has not been used.   [CORIOLIS]
+      CORIOLIS(i,k,j,n) = cori(jrow,n)*( 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(507): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' sff volrate(Sv)=',es13.6,' etabar(cm)=',e20.14/
+--------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(501): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' |dS/dt|=',es13.6/,' Tbar(deg K)=',es20.14,' Sbar=',e20.14
+---------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(501): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' |dS/dt|=',es13.6/,' Tbar(deg K)=',es20.14,' Sbar=',e20.14
+-------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(503): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' scans=',i4, ' Heat (1e26 Joules)=',e20.14
+---------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(504): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' Salt (1e26 grams deviation from 35)=',e20.14)
+------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(24): remark #7713: This statement function has not been used.   [DRHODT]
+       drhodt (tq, sq, k) = c(k,1) + (c(k,4) + c(k,7)*sq)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(27): remark #7713: This statement function has not been used.   [DRHODS]
+       drhods (tq, sq, k) = (c(k,4) + 2.0*c(k,7)*sq + c(k,8)*tq)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/topog.F(203): remark #7713: This statement function has not been used.   [KMU]
+      kmu(i,j) = min(kmt(i,j), kmt(i+1,j), kmt(i,j+1), kmt(i+1,j+1))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/godas3/MOM3/src/mom3/topog.F(204): remark #7713: This statement function has not been used.   [HUM]
+      hum(i,j) = min(ht(i,j), ht(i+1,j), ht(i,j+1), ht(i+1,j+1))
+------^
+++ pwd
++ here=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/compile
++ cd ..
+++ pwd
++ base=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd
++ cd ../../exec
+++ pwd
++ execDir=/lfs/h1/ops/prod/packages/godas.v1.1.0/exec
++ cd /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/work
+++ pwd
++ workDir=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/work
++ cd /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/compile
++ mv /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_dw_mom3das.fd/work/ocndas.ts.mpi.x /lfs/h1/ops/prod/packages/godas.v1.1.0/exec/godas_dw_mom3das
+............................................................................................................................/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1670): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_int8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+--------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1650): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_int8( put_data, put_len, put_pe, get_data, get_len, get_pe )
+-------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1630): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_cmplx8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+----------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1610): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_cmplx8( put_data, put_len, put_pe, get_data, get_len, get_pe )
+---------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(1590): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_transmit_real8_scalar( put_data, put_len, put_pe, get_data, get_len, get_pe )
+---------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(741): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_cmplx8_scalar( get_data, get_len, get_pe )
+---------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(711): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_cmplx8( get_data, get_len, get_pe )
+--------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(681): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_int8_scalar( get_data, get_len, get_pe )
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(651): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_int8( get_data, get_len, get_pe )
+------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp.F90(621): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GET_DATA]
+    subroutine mpp_recv_real8_scalar( get_data, get_len, get_pe )
+--------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp_domains.F90(1465): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [GLOBAL_FIELD]
+    subroutine mpp_get_global2D_i8_3d( domain, local_field, global_field )
+------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/mpp_io.F90(1551): warning #6843: A dummy argument with an explicit INTENT(OUT) declaration is not given an explicit value.   [IOSPEC]
+    subroutine mpp_get_iospec( unit, iospec )
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(507): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' sff volrate(Sv)=',es13.6,' etabar(cm)=',e20.14/
+--------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(501): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' |dS/dt|=',es13.6/,' Tbar(deg K)=',es20.14,' Sbar=',e20.14
+---------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(501): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' |dS/dt|=',es13.6/,' Tbar(deg K)=',es20.14,' Sbar=',e20.14
+-------------------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(503): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' scans=',i4, ' Heat (1e26 Joules)=',e20.14
+---------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/diag_mw_outside.F(504): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+     &,      ' Salt (1e26 grams deviation from 35)=',e20.14)
+------------------------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(12): remark #7713: This statement function has not been used.   [DHUE]
+      dhue(i,k,j)   = min(dhu(i+1,k,j),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(13): remark #7713: This statement function has not been used.   [DHUN]
+      dhun(i,k,j)   = min(dhu(i,k,j+1),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(123): remark #7713: This statement function has not been used.   [CORIOLIS]
+      CORIOLIS(i,k,j,n) = cori(jrow,n)*( 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(12): remark #7713: This statement function has not been used.   [DHUE]
+      dhue(i,k,j)   = min(dhu(i+1,k,j),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(13): remark #7713: This statement function has not been used.   [DHUN]
+      dhun(i,k,j)   = min(dhu(i,k,j+1),dhu(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(40): remark #7713: This statement function has not been used.   [ADV_UX]
+      ADV_Ux(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(41): remark #7713: This statement function has not been used.   [ADV_UY]
+      ADV_Uy(i,k,j) = (adv_fn(i,k,j) - adv_fn(i,k,j-1))*dy_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(42): remark #7713: This statement function has not been used.   [ADV_UZ]
+      ADV_Uz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_u2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(43): remark #7713: This statement function has not been used.   [ADV_METRIC]
+      ADV_metric(i,k,j,n)=advmet(jrow,n)*u(i,k,j,1,tau)*u(i,k,j,3-n,tau)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(50): remark #7713: This statement function has not been used.   [DIFF_UX]
+      DIFF_Ux(i,k,j) = (diff_fe(i,k,j) - diff_fe(i-1,k,j))*dx_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(51): remark #7713: This statement function has not been used.   [DIFF_UY]
+      DIFF_Uy(i,k,j) = (diff_fn(i,k,j) - diff_fn(i,k,j-1))*dy_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(52): remark #7713: This statement function has not been used.   [DIFF_UZ]
+      DIFF_Uz(i,k,j) = (diff_fb(i,k-1,j) - diff_fb(i,k,j))*dz_ur(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(58): remark #7713: This statement function has not been used.   [DIFF_METRIC]
+       DIFF_metric(i,k,j,n) = (am3(jrow)*u(i,k,j,n,taum1)
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdifm.h(123): remark #7713: This statement function has not been used.   [CORIOLIS]
+      CORIOLIS(i,k,j,n) = cori(jrow,n)*( 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(208): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9107  format(' dtts(sec)       = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(206): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9106  format(' abihrm(cm4/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(204): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9105  format(' ahsteep(cm2/sec) = ',e12.6
+-------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(202): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9104  format(' athkdf(cm2/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(200): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9103  format(' ahisop(cm2/sec) = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(198): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+9102  format(' ah(cm2/sec)     = ',e12.6
+------------------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(345): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+      write (stdout,'(5(1x,e12.6))') (dtxsqr(k),k=1,km)
+----------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc.F(375): remark #8291: Recommended relationship between field width 'W' and the number of fractional digits 'D' in this edit descriptor is 'W>=D+7'.
+      write (stdout,'(5(1x,e12.6))') (fzisop(k),k=1,km)
+----------------------------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(20): remark #7713: This statement function has not been used.   [DENS]
+      dens (tq, sq, k) = (c(k,1) + (c(k,4) + c(k,7)*sq)*sq +
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(12): remark #7713: This statement function has not been used.   [DHTE]
+      dhte(i,k,j)   = min(dht(i+1,k,j),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(13): remark #7713: This statement function has not been used.   [DHTN]
+      dhtn(i,k,j)   = min(dht(i,k,j+1),dht(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(16): remark #7713: This statement function has not been used.   [T_I]
+      T_i(i,k,j,n,ip) = t(i+ip,max(1,k-1),j,n,taum1) - dhwe(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(19): remark #7713: This statement function has not been used.   [T_J]
+      T_j(i,k,j,n,jp) = t(i,max(1,k-1),j+jp,n,taum1) - dhwn(i,k-1,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(24): remark #7713: This statement function has not been used.   [DZ_WTR]
+      dz_wtr(i,k,j) = c1/dhwt(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(52): remark #7713: This statement function has not been used.   [ADV_TX]
+      ADV_Tx(i,k,j) = (adv_fe(i,k,j) - adv_fe(i-1,k,j))*dx_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(54): remark #7713: This statement function has not been used.   [ADV_TY]
+      ADV_Ty(i,k,j)=(adv_f4n(i,k,j,n)-adv_f4n(i,k,j-1,n))*dy_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(58): remark #7713: This statement function has not been used.   [ADV_TZ]
+      ADV_Tz(i,k,j) = (adv_fb(i,k-1,j) - adv_fb(i,k,j))*dz_t2r(i,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(65): remark #7713: This statement function has not been used.   [DIFF_TX]
+      DIFF_Tx(i,k,j) = (diff_fe(i,  k,j)*tmask(i+1,k,j)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(67): remark #7713: This statement function has not been used.   [DIFF_TY]
+      DIFF_Ty(i,k,j) = (diff_fn(i,k,j  )*tmask(i,k,j+1)
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/fdift.h(69): remark #7713: This statement function has not been used.   [DIFF_TZ]
+      DIFF_Tz(i,k,j) = ((diff_fb(i,k-1,j) - diff_fb(i,k,j))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(5): remark #7713: This statement function has not been used.   [DRODXE]
+      drodxe(i,k,j,ip) =    drho(i+ip,k,j,1)*ddxt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(7): remark #7713: This statement function has not been used.   [DRODZE]
+      drodze(i,k,j,ip,kr) = drho(i+ip,k,j,1)*ddzt(i+ip,k-1+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(10): remark #7713: This statement function has not been used.   [DRODYN]
+      drodyn(i,k,j,jq) =    drho(i,k,j+jq,1)*ddyt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(12): remark #7713: This statement function has not been used.   [DRODZN]
+      drodzn(i,k,j,jq,kr) = drho(i,k,j+jq,1)*ddzt(i,k-1+kr,j+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(15): remark #7713: This statement function has not been used.   [DRODXB]
+      drodxb(i,k,j,ip,kr) = drho(i,k+kr,j,1)*ddxt(i-1+ip,k+kr,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(17): remark #7713: This statement function has not been used.   [DRODYB]
+      drodyb(i,k,j,jq,kr) = drho(i,k+kr,j,1)*ddyt(i,k+kr,j-1+jq,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/isopyc_sf.h(19): remark #7713: This statement function has not been used.   [DRODZB]
+      drodzb(i,k,j,kr) =    drho(i,k+kr,j,1)*ddzt(i,k,j,1) + 
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/topog.F(203): remark #7713: This statement function has not been used.   [KMU]
+      kmu(i,j) = min(kmt(i,j), kmt(i+1,j), kmt(i,j+1), kmt(i+1,j+1))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/topog.F(204): remark #7713: This statement function has not been used.   [HUM]
+      hum(i,j) = min(ht(i,j), ht(i+1,j), ht(i,j+1), ht(i+1,j+1))
+------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(24): remark #7713: This statement function has not been used.   [DRHODT]
+       drhodt (tq, sq, k) = c(k,1) + (c(k,4) + c(k,7)*sq)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(27): remark #7713: This statement function has not been used.   [DRHODS]
+       drhods (tq, sq, k) = (c(k,4) + 2.0*c(k,7)*sq + c(k,8)*tq)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(24): remark #7713: This statement function has not been used.   [DRHODT]
+       drhodt (tq, sq, k) = c(k,1) + (c(k,4) + c(k,7)*sq)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(27): remark #7713: This statement function has not been used.   [DRHODS]
+       drhods (tq, sq, k) = (c(k,4) + 2.0*c(k,7)*sq + c(k,8)*tq)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(30): remark #7713: This statement function has not been used.   [DDENSDTDT]
+       ddensdtdt (tq,sq,k) = 2.0*c(k,3) + 6.0*c(k,6)*tq + 2.0*c(k,8)*sq 
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(31): remark #7713: This statement function has not been used.   [DDENSDTDS]
+       ddensdtds (tq,sq,k) = c(k,4) + 2.0*c(k,7)*sq + 2.0*c(k,8)*tq
+-------^
+/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/godas3/MOM3/src/mom3/dens.h(32): remark #7713: This statement function has not been used.   [DDENSDSDS]
+       ddensdsds (tq,sq,k) = 2.0*c(k,5) + 2.0*c(k,7)*tq + 6.0*c(k,9)*sq
+-------^
+++ pwd
++ here=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/compile
++ cd ..
+++ pwd
++ base=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd
++ cd ../../exec
+++ pwd
++ execDir=/lfs/h1/ops/prod/packages/godas.v1.1.0/exec
++ cd /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/work
+++ pwd
++ workDir=/lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/work
++ cd /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/compile
++ mv /lfs/h1/ops/prod/packages/godas.v1.1.0/sorc/godas_mom3das.fd/work/ocndas.ts.mpi.x /lfs/h1/ops/prod/packages/godas.v1.1.0/exec/godas_mom3das
